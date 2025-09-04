@@ -12,4 +12,9 @@ export const loginSchema = z.object({
   password: z.string().trim().min(1, 'Поле обязательно'),
 });
 
+export const addExecutorSchema = z.object({
+  fullname: z.string().trim().min(1, 'Поле обязательно'),
+});
+
 export type LoginSchema = z.output<typeof loginSchema>;
+export type AddExecutorSchema = z.output<typeof addExecutorSchema>;

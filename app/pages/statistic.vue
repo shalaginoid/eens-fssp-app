@@ -1,6 +1,8 @@
 <template>
   <UContainer class="my-8">
     <UCard>
+      <h1 class="mb-4 text-2xl font-bold">Статистика</h1>
+
       <GosuslugiBar :data="data" />
     </UCard>
   </UContainer>

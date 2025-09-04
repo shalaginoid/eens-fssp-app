@@ -76,6 +76,10 @@ const mainMenu = computed(() => [
     to: '/',
   },
   {
+    label: 'Исполнители',
+    to: '/executors',
+  },
+  {
     label: 'Статистика',
     to: '/statistic',
   },
