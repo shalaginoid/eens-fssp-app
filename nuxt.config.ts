@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
   app: {
-    baseURL: '/eens-fssp-app/',
+    baseURL: '/eens-fssp/',
     head: {
       titleTemplate: '%s | Госпочта (ФССП)',
       htmlAttrs: {
@@ -45,7 +45,7 @@ export default defineNuxtConfig({
       websocket: true,
     },
     output: {
-      dir: 'eens-fssp-app',
+      dir: 'eens-fssp',
     },
     iis: {
       mergeConfig: true,

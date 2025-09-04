@@ -10,8 +10,8 @@
         empty="Нет данных"
         :ui="{
           base: 'min-w-full overflow-auto',
-          th: 'py-2 px-1.5',
-          td: 'whitespace-normal py-2 px-1.5',
+          th: 'p-3',
+          td: 'whitespace-normal py-3 aligb',
         }"
       >
         <template #actions-cell="{ row }">
@@ -20,6 +20,7 @@
             icon="i-lucide-settings"
             variant="link"
             color="neutral"
+            class="flex p-0"
           />
         </template>
       </UTable>

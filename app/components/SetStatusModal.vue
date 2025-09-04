@@ -1,8 +1,8 @@
 <template>
   <UModal :close="{ onClick: () => emit('close', false) }">
-    <template #title>Назначение исполнителя</template>
+    <template #title>Исполнитель</template>
 
-    <template #description></template>
+    <template #description>Назначение исполнителя и установка статуса</template>
 
     <template #body>
       <UForm
@@ -24,6 +24,7 @@
             v-model="state.executorId"
             :items="props.executors"
             placeholder="Исполнитель"
+            class="min-w-48"
           />
         </UFormField>
 
@@ -32,6 +33,7 @@
             v-model="state.statusId"
             :items="props.statuses"
             placeholder="Статус"
+            class="min-w-36"
           />
         </UFormField>
 
