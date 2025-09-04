@@ -23,6 +23,5 @@ logs
 .env.*
 !.env.example
 
-eens-fssp-app
-eens-fssp-app.rar
-db.js
+eens-fssp
+eens-fssp.rar
