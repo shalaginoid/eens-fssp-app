@@ -55,10 +55,15 @@ type Status = {
   value: number;
 };
 
+type Executor = {
+  label: string;
+  value: number;
+};
+
 const props = defineProps<{
   message: Message;
   statuses: Array<Status>;
-  executors: Array<object>;
+  executors: Array<Executor>;
 }>();
 
 const emit = defineEmits<{ close: any }>();
