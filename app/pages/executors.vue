@@ -19,43 +19,14 @@
         </template>
       </UTable>
 
-      <!-- <UModal
-        v-model:open="showAddExrcutorModal"
-        title="Добавление исполнителя"
-      >
-        <UButton label="Добавить" />
-
-        <template #description>
-          Исполнителя можно будет назначить в разделе "Уведомления"
-        </template>
-
-        <template #body>
-          <UForm
-            :schema="addExecutorSchema"
-            :state="state"
-            class="space-y-4"
-            @submit="addExecutor"
-          >
-            <UFormField
-              label="Фамилия и инициалы"
-              description="Например, Иванов И.И."
-              name="fullname"
-            >
-              <UInput v-model="state.fullname" />
-            </UFormField>
-
-            <UButton type="submit">Добавить</UButton>
-          </UForm>
-        </template>
-      </UModal> -->
+      <UButton label="Добавить" @click="openAddExecutorModal" />
     </UCard>
   </UContainer>
 </template>
 
 <script lang="ts" setup>
 import type { TableColumn } from '@nuxt/ui';
-import type { FormSubmitEvent } from '@nuxt/ui';
-import type { AddExecutorSchema } from '~~/shared/utils/schemas';
+import AddExecutorModal from '@/components/AddExecutorModal.vue';
 import EditExecutorModal from '@/components/EditExecutorModal.vue';
 
 definePageMeta({
@@ -66,7 +37,6 @@ useSeoMeta({
   title: 'Исполнители',
 });
 
-const toast = useToast();
 const overlay = useOverlay();
 
 type Executor = {
@@ -95,45 +65,11 @@ const columns: TableColumn<Executor>[] = [
   },
 ];
 
-const state = reactive<Partial<AddExecutorSchema>>({
-  fullname: 'Иванов И.И.',
-});
+// Добавление исполнителя
+const addExecutorModal = overlay.create(AddExecutorModal);
 
-const showAddExrcutorModal = ref(false);
-const showEditExrcutorModal = ref(false);
-
-async function addExecutor(event: FormSubmitEvent<AddExecutorSchema>) {
-  const data = toRaw(event.data);
-
-  showAddExrcutorModal.value = false;
-
-  const insertedData = {
-    id: 41,
-    executor: data.fullname,
-  };
-
-  executors.value.push(insertedData);
-
-  toast.add({
-    description: 'Исполнитель успешно добавлен',
-    color: 'success',
-  });
-
-  // try {
-  //   const response = await $fetch.raw('api/executors', {
-  //     method: 'POST',
-  //     body: JSON.stringify({ executor: data.fullname }),
-  //   });
-
-  //   if (response.status === 201) {
-  //     const insertedData = {
-  //       id: JSON.parse(response.statusText).id,
-  //       executor: data.fullname,
-  //     }
-  //   }
-  // } catch (error: any) {
-  //   console.log(error.message);
-  // }
+async function openAddExecutorModal() {
+  await addExecutorModal.open();
 }
 
 // Редактирование исполнителя
