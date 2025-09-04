@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   await client.bind(`eksbyt\\${ldap.username}`, ldap.password);
 
   const query =
-    '(&(objectCategory=user)(memberOf=cn=Сервис почтовых рассылок,ou=Пользователи ОАО ЕЭНС,dc=eksbyt,dc=ru))';
+    '(&(objectCategory=user)(memberOf=cn=Госпочта ФССП,ou=Пользователи ОАО ЕЭНС,dc=eksbyt,dc=ru))';
 
   const { searchEntries } = await client.search('dc=eksbyt,dc=ru', {
     filter: query,

@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
     });
 
     const mailGroupString =
-      'CN=Сервис почтовых рассылок,OU=Пользователи ОАО ЕЭНС,DC=eksbyt,DC=ru';
+      'CN=Госпочта ФССП,OU=Пользователи ОАО ЕЭНС,DC=eksbyt,DC=ru';
     const memberOf = searchEntries[0].memberOf as Array<string>;
 
     const isMailGroupMember = memberOf.includes(mailGroupString);
