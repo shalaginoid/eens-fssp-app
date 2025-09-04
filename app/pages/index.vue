@@ -486,26 +486,36 @@ function useGetMonths() {
 }
 
 async function getExecutors() {
-  const users = await $fetch('/api/users');
-  executors.value = users.map((item) => {
+  const data = await $fetch('/api/executors');
+  executors.value = data.map((item) => {
     return {
-      label: item.fullname
-        ?.toString()
-        ?.split(/\s+/)
-        .map((w: string, i: any) =>
-          i ? w.substring(0, 1).toUpperCase() + '.' : w,
-        )
-        .join(' '),
-      value: item.fullname
-        ?.toString()
-        ?.split(/\s+/)
-        .map((w: string, i: any) =>
-          i ? w.substring(0, 1).toUpperCase() + '.' : w,
-        )
-        .join(' '),
+      label: item.executor,
+      value: item.executor,
     };
   });
 }
+
+// async function getExecutors() {
+//   const users = await $fetch('/api/users');
+//   executors.value = users.map((item) => {
+//     return {
+//       label: item.fullname
+//         ?.toString()
+//         ?.split(/\s+/)
+//         .map((w: string, i: any) =>
+//           i ? w.substring(0, 1).toUpperCase() + '.' : w,
+//         )
+//         .join(' '),
+//       value: item.fullname
+//         ?.toString()
+//         ?.split(/\s+/)
+//         .map((w: string, i: any) =>
+//           i ? w.substring(0, 1).toUpperCase() + '.' : w,
+//         )
+//         .join(' '),
+//     };
+//   });
+// }
 
 async function getStatuses() {
   const response = await $fetch('/api/statuses');
