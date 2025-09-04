@@ -15,13 +15,24 @@
         }"
       >
         <template #actions-cell="{ row }">
-          <UButton
-            @click="openEditExecutorModal(row.original)"
-            icon="i-lucide-settings"
-            variant="link"
-            color="neutral"
-            class="flex p-0"
-          />
+          <div class="flex gap-4">
+            <UButton
+              @click="openEditExecutorModal(row.original)"
+              icon="i-lucide-settings"
+              variant="link"
+              color="neutral"
+              class="flex p-0"
+            />
+
+            <UButton
+              v-if="user?.department === 'УСПО_ОИСиИС'"
+              @click="openDeleteExecutorModal(row.original)"
+              icon="i-lucide-trash-2"
+              variant="link"
+              color="neutral"
+              class="flex p-0"
+            />
+          </div>
         </template>
       </UTable>
 
@@ -34,6 +45,7 @@
 import type { TableColumn } from '@nuxt/ui';
 import AddExecutorModal from '@/components/AddExecutorModal.vue';
 import EditExecutorModal from '@/components/EditExecutorModal.vue';
+import DeleteExecutorModal from '@/components/DeleteExecutorModal.vue';
 
 definePageMeta({
   middleware: ['authenticated'],
@@ -42,6 +54,8 @@ definePageMeta({
 useSeoMeta({
   title: 'Исполнители',
 });
+
+const { user } = useUserSession();
 
 const toast = useToast();
 const overlay = useOverlay();
@@ -103,6 +117,28 @@ async function openEditExecutorModal(data: Executor) {
       description: 'Исполнитель успешно изменен',
       color: 'success',
     });
+  }
+}
+
+// Удаление исполнителя
+const deleteExecutorModal = overlay.create(DeleteExecutorModal);
+
+async function openDeleteExecutorModal(data: Executor) {
+  const executor: Executor = await deleteExecutorModal.open({
+    data,
+  });
+
+  if (executor) {
+    const index = executors.value.indexOf(toRaw(executor));
+
+    if (index !== -1) {
+      executors.value.splice(index, 1);
+
+      toast.add({
+        description: 'Исполнитель успешно удален',
+        color: 'success',
+      });
+    }
   }
 }
 </script>
