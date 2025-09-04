@@ -2,13 +2,50 @@
   <div class="h-full">
     <div class="h-full bg-white">
       <div class="bg-elevated mb-4 grid grid-cols-6 gap-2 p-2">
-        <USelect
-          @change="changeDate(selectedDate.value)"
-          size="md"
-          v-model="selectedDate.value"
-          :items="useGetMonths()"
-          :loading="loading"
-        />
+        <div class="grid grid-cols-2 gap-2">
+          <USelect
+            @change="changeDate(selectedDate.value)"
+            size="md"
+            v-model="selectedDate.value"
+            :items="useGetMonths()"
+            :loading="loading"
+          />
+
+          <ClientOnly>
+            <JsonExcel
+              style="display: inline-block"
+              :data="messages"
+              :fields="{
+                Исполнитель: 'executor',
+                'Дата уведомления': 'notifyDate',
+                'Тип должника': 'fssp:DebtorType',
+                'Наименование должника': 'fssp:DbtrName',
+                'Наименование документа': 'fssp:DocName',
+                'Номер исп. производства': 'fssp:IpNo',
+                'Дата документа': 'fssp:IpRiseDate',
+                Сумма: 'fssp:TotalArrestDebtSum',
+                'Сумма (по сводному производству)': 'fssp:IdDebtSum',
+                'Номер исп. листа': 'fssp:IdDocNo',
+                'Дата исп. листа': 'fssp:IdDocDate',
+                'Номер дела': 'fssp:IdDeloNo',
+                'Дата дела': 'fssp:IdDeloDate',
+                'ФИО пристава': 'fssp:Spi',
+                Взыскатель: 'fssp:IdCrdrName',
+              }"
+              type="xlsx"
+              :name="`${moment().format('YYYYMMDDHHmmss')}.xlsx`"
+              worksheet="Выгрузка"
+            >
+              <UButton
+                label="Выгрузить"
+                color="neutral"
+                variant="outline"
+                icon="i-mdi-microsoft-excel"
+                class="w-full"
+              />
+            </JsonExcel>
+          </ClientOnly>
+        </div>
 
         <USelect
           size="md"
@@ -260,6 +297,8 @@
 <script setup lang="ts">
 import moment from 'moment';
 import 'moment/dist/locale/ru';
+// @ts-ignore
+import JsonExcel from 'vue-json-excel3';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import type { TableColumn } from '@nuxt/ui';
 import SetStatusModal from '@/components/SetStatusModal.vue';
