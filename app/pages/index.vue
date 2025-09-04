@@ -167,7 +167,7 @@
             :pagination-options="{
               getPaginationRowModel: getPaginationRowModel(),
             }"
-            :data="data"
+            :data="messages"
             :columns="columns"
             :loading="loading"
             :ui="{
@@ -329,7 +329,7 @@ const pagination = ref({
   pageSize: 25,
 });
 
-const data = ref();
+const messages = ref();
 const loading = ref(false);
 const selectedDate: any = ref(useGetMonths()[0]);
 const subjectTypesValues = ref(['ЮЛ', 'ФЛ', 'ИП']);
@@ -451,7 +451,7 @@ async function getMessages(date: string | undefined) {
   try {
     loading.value = true;
     const response = await $fetch<Message[]>(`/api/messages/${date}`);
-    data.value = response.filter((value: any) => value != null);
+    messages.value = response.filter((value: any) => value != null);
   } catch (error: any) {
     console.log(error.message);
   } finally {
@@ -524,19 +524,34 @@ onMounted(async () => {
 const setStatusModal = overlay.create(SetStatusModal);
 
 async function openSetStatusModal(message: Message) {
-  const result = await setStatusModal.open({
+  const result: any = await setStatusModal.open({
     message: message,
     statuses: statuses.value,
     executors: executors.value,
   });
 
   if (result) {
-    console.log(result);
+    const findMessage = messages.value.find(
+      (item: Message) => item.messageId === result.messageId,
+    );
 
-    // toast.add({
-    //   description: 'Статус успешно назначен',
-    //   color: 'success',
-    // });
+    const executor = toRaw(executors.value).find(
+      (item: any) => item.value == result.executorId,
+    );
+
+    const status = toRaw(statuses.value).find(
+      (item: any) => item.value === result.statusId,
+    );
+
+    findMessage.executorId = result.executorId;
+    findMessage.statusId = result.statusId;
+    findMessage.executor = executor.label;
+    findMessage.status = status.label;
+
+    toast.add({
+      description: 'Статус и исполнитель успешно установлены',
+      color: 'success',
+    });
   }
 }
 </script>

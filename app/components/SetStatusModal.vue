@@ -11,6 +11,14 @@
         class="space-y-4"
         @submit="setStatus"
       >
+        <UAlert
+          v-if="errorMessage"
+          class="mb-4"
+          color="error"
+          variant="soft"
+          :description="errorMessage"
+        ></UAlert>
+
         <UFormField label="Исполнитель" name="executorId">
           <USelect
             v-model="state.executorId"
@@ -76,14 +84,19 @@ const props = defineProps<{
   executors: Array<Executor>;
 }>();
 
+console.log();
+
 const emit = defineEmits<{ close: any }>();
 
 const state = reactive<Partial<SetStatusSchema>>({
-  executorId: undefined,
-  statusId: undefined,
+  executorId: Number(toRaw(props.message).executorId) || undefined,
+  statusId: Number(toRaw(props.message).statusId) || undefined,
 });
 
+const errorMessage = ref(null);
+
 async function setStatus(event: FormSubmitEvent<SetStatusSchema>) {
+  errorMessage.value = null;
   const data = toRaw(event.data);
 
   const body = {
@@ -92,11 +105,17 @@ async function setStatus(event: FormSubmitEvent<SetStatusSchema>) {
     executorId: data.executorId,
   };
 
-  emit('close', body);
+  try {
+    const response = await $fetch.raw('/api/relations', {
+      method: 'POST',
+      body,
+    });
 
-  // const response = await $fetch.raw('/api/relations', {
-  //   method: 'post',
-  //   body: JSON.stringify(data),
-  // });
+    if (response.status === 204) {
+      emit('close', body);
+    }
+  } catch (error: any) {
+    errorMessage.value = error.message;
+  }
 }
 </script>
