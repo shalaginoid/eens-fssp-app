@@ -1,7 +1,11 @@
 <template>
   <UModal :close="{ onClick: () => emit('close', false) }">
     <template #title>Добавление исполнителя</template>
-    <template #description></template>
+
+    <template #description>
+      Можно будет назначить в разделе уведомлений
+    </template>
+
     <template #body>
       <UForm
         :schema="addExecutorSchema"
@@ -20,17 +24,6 @@
         <UButton type="submit">Добавить</UButton>
       </UForm>
     </template>
-
-    <!-- <template #footer>
-      <div class="flex gap-2">
-        <UButton
-          color="neutral"
-          label="Dismiss"
-          @click="emit('close', false)"
-        />
-        <UButton label="Success" @click="emit('close', true)" />
-      </div>
-    </template> -->
   </UModal>
 </template>
 
@@ -38,13 +31,16 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 import type { AddExecutorSchema } from '~~/shared/utils/schemas';
 
-const toast = useToast();
-
 // defineProps<{
-//   data: any;
+//   count: number;
 // }>();
 
-const emit = defineEmits<{ close: [boolean] }>();
+type Executor = {
+  id: number;
+  executor: string;
+};
+
+const emit = defineEmits<{ close: any }>();
 
 const state = reactive<Partial<AddExecutorSchema>>({
   fullname: 'Иванов И.И.',
@@ -53,17 +49,12 @@ const state = reactive<Partial<AddExecutorSchema>>({
 async function addExecutor(event: FormSubmitEvent<AddExecutorSchema>) {
   const data = toRaw(event.data);
 
-  const insertedData = {
+  const insertedData: Executor = {
     id: 41,
     executor: data.fullname,
   };
 
-  // executors.value.push(insertedData);
-
-  toast.add({
-    description: 'Исполнитель успешно добавлен',
-    color: 'success',
-  });
+  emit('close', insertedData);
 
   // try {
   //   const response = await $fetch.raw('api/executors', {

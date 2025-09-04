@@ -37,6 +37,7 @@ useSeoMeta({
   title: 'Исполнители',
 });
 
+const toast = useToast();
 const overlay = useOverlay();
 
 type Executor = {
@@ -69,7 +70,15 @@ const columns: TableColumn<Executor>[] = [
 const addExecutorModal = overlay.create(AddExecutorModal);
 
 async function openAddExecutorModal() {
-  await addExecutorModal.open();
+  const executor = await addExecutorModal.open();
+
+  if (executor) {
+    executors.value.push(executor);
+    toast.add({
+      description: 'Исполнитель успешно добавлен',
+      color: 'success',
+    });
+  }
 }
 
 // Редактирование исполнителя
