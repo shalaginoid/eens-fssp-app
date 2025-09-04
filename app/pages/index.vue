@@ -40,7 +40,7 @@
 
         <USelect
           size="md"
-          :items="executors"
+          :items="executorsValues"
           :model-value="
             table?.tableApi?.getColumn('executor')?.getFilterValue() as string
           "
@@ -213,20 +213,13 @@
 
             <!-- Исполнитель -->
             <template #executor-cell="{ row }">
-              <UModal title="Исполнитель">
-                <UButton
-                  :label="row.original.executor ?? 'Не назначен'"
-                  color="neutral"
-                  variant="link"
-                  size="xs"
-                />
-
-                <template #body>
-                  <pre>{{ row.original }}</pre>
-                </template>
-
-                <template #description></template>
-              </UModal>
+              <UButton
+                :label="row.original.executor ?? 'Не назначен'"
+                @click="openSetStatusModal(row.original)"
+                color="neutral"
+                variant="link"
+                size="xs"
+              />
             </template>
 
             <!-- Дата уведомления -->
@@ -269,6 +262,7 @@ import moment from 'moment';
 import 'moment/dist/locale/ru';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import type { TableColumn } from '@nuxt/ui';
+import SetStatusModal from '@/components/SetStatusModal.vue';
 
 useSeoMeta({
   title: 'Уведомления',
@@ -277,6 +271,9 @@ useSeoMeta({
 definePageMeta({
   middleware: ['authenticated'],
 });
+
+const toast = useToast();
+const overlay = useOverlay();
 
 const table = useTemplateRef('table');
 
@@ -339,6 +336,7 @@ const subjectTypesValues = ref(['ЮЛ', 'ФЛ', 'ИП']);
 const statuses = ref();
 const statusesValues = ref();
 const executors = ref();
+const executorsValues = ref();
 
 type Message = {
   messageId: number;
@@ -487,35 +485,21 @@ function useGetMonths() {
 
 async function getExecutors() {
   const data = await $fetch('/api/executors');
-  executors.value = data.map((item) => {
+
+  executorsValues.value = data.map((item) => {
     return {
       label: item.executor,
       value: item.executor,
     };
   });
-}
 
-// async function getExecutors() {
-//   const users = await $fetch('/api/users');
-//   executors.value = users.map((item) => {
-//     return {
-//       label: item.fullname
-//         ?.toString()
-//         ?.split(/\s+/)
-//         .map((w: string, i: any) =>
-//           i ? w.substring(0, 1).toUpperCase() + '.' : w,
-//         )
-//         .join(' '),
-//       value: item.fullname
-//         ?.toString()
-//         ?.split(/\s+/)
-//         .map((w: string, i: any) =>
-//           i ? w.substring(0, 1).toUpperCase() + '.' : w,
-//         )
-//         .join(' '),
-//     };
-//   });
-// }
+  executors.value = data.map((item) => {
+    return {
+      label: item.executor,
+      value: item.id,
+    };
+  });
+}
 
 async function getStatuses() {
   const response = await $fetch('/api/statuses');
@@ -535,4 +519,23 @@ onMounted(async () => {
   await getExecutors();
   await getStatuses();
 });
+
+// Назначение статуса и исполнителя
+const setStatusModal = overlay.create(SetStatusModal);
+
+async function openSetStatusModal(message: Message) {
+  const result = await setStatusModal.open({
+    message: message,
+    statuses: statuses.value,
+    executors: executors.value,
+  });
+
+  // if (result) {
+  //   executors.value.push(executor);
+  //   toast.add({
+  //     description: 'Исполнитель успешно добавлен',
+  //     color: 'success',
+  //   });
+  // }
+}
 </script>
