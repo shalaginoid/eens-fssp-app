@@ -31,10 +31,6 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 import type { AddExecutorSchema } from '~~/shared/utils/schemas';
 
-// defineProps<{
-//   count: number;
-// }>();
-
 type Executor = {
   id: number;
   executor: string;
@@ -49,27 +45,22 @@ const state = reactive<Partial<AddExecutorSchema>>({
 async function addExecutor(event: FormSubmitEvent<AddExecutorSchema>) {
   const data = toRaw(event.data);
 
-  const insertedData: Executor = {
-    id: 41,
-    executor: data.fullname,
-  };
+  try {
+    const response = await $fetch.raw('/api/executors', {
+      method: 'POST',
+      body: JSON.stringify({ executor: data.fullname }),
+    });
 
-  emit('close', insertedData);
+    if (response.status === 201) {
+      const insertedData: Executor = {
+        id: JSON.parse(response.statusText).id,
+        executor: data.fullname,
+      };
 
-  // try {
-  //   const response = await $fetch.raw('api/executors', {
-  //     method: 'POST',
-  //     body: JSON.stringify({ executor: data.fullname }),
-  //   });
-
-  //   if (response.status === 201) {
-  //     const insertedData = {
-  //       id: JSON.parse(response.statusText).id,
-  //       executor: data.fullname,
-  //     }
-  //   }
-  // } catch (error: any) {
-  //   console.log(error.message);
-  // }
+      emit('close', insertedData);
+    }
+  } catch (error: any) {
+    console.log(error.message);
+  }
 }
 </script>
