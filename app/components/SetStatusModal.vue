@@ -11,17 +11,17 @@
         class="space-y-4"
         @submit="setStatus"
       >
-        <UFormField label="Исполнитель" name="executor">
+        <UFormField label="Исполнитель" name="executorId">
           <USelect
-            v-model="state.executor"
+            v-model="state.executorId"
             :items="props.executors"
             placeholder="Исполнитель"
           />
         </UFormField>
 
-        <UFormField label="Статус" name="status">
+        <UFormField label="Статус" name="statusId">
           <USelect
-            v-model="state.status"
+            v-model="state.statusId"
             :items="props.statuses"
             placeholder="Статус"
           />
@@ -79,12 +79,24 @@ const props = defineProps<{
 const emit = defineEmits<{ close: any }>();
 
 const state = reactive<Partial<SetStatusSchema>>({
-  executor: undefined,
-  status: undefined,
+  executorId: undefined,
+  statusId: undefined,
 });
 
 async function setStatus(event: FormSubmitEvent<SetStatusSchema>) {
   const data = toRaw(event.data);
-  console.log(data);
+
+  const body = {
+    messageId: toRaw(props.message).messageId,
+    statusId: data.statusId,
+    executorId: data.executorId,
+  };
+
+  emit('close', body);
+
+  // const response = await $fetch.raw('/api/relations', {
+  //   method: 'post',
+  //   body: JSON.stringify(data),
+  // });
 }
 </script>

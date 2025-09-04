@@ -530,12 +530,13 @@ async function openSetStatusModal(message: Message) {
     executors: executors.value,
   });
 
-  // if (result) {
-  //   executors.value.push(executor);
-  //   toast.add({
-  //     description: 'Исполнитель успешно добавлен',
-  //     color: 'success',
-  //   });
-  // }
+  if (result) {
+    console.log(result);
+
+    // toast.add({
+    //   description: 'Статус успешно назначен',
+    //   color: 'success',
+    // });
+  }
 }
 </script>

@@ -17,8 +17,8 @@ export const addExecutorSchema = z.object({
 });
 
 export const setStatusSchema = z.object({
-  executor: z.number('Поле обязательно'),
-  status: z.number('Поле обязательно'),
+  executorId: z.number('Поле обязательно'),
+  statusId: z.number('Поле обязательно'),
 });
 
 export type LoginSchema = z.output<typeof loginSchema>;
