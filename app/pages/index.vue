@@ -509,7 +509,7 @@ async function getStatuses() {
   statuses.value = response.map((item) => {
     return {
       label: item.status,
-      value: item.id,
+      value: item.id as Number,
     };
   });
 }

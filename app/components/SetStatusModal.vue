@@ -5,8 +5,6 @@
     <template #description></template>
 
     <template #body>
-      <pre>{{ props }}</pre>
-
       <UForm
         :schema="setStatusSchema"
         :state="state"
@@ -14,7 +12,19 @@
         @submit="setStatus"
       >
         <UFormField label="Исполнитель" name="executor">
-          <UInput v-model="state.executor" />
+          <USelect
+            v-model="state.executor"
+            :items="props.executors"
+            placeholder="Исполнитель"
+          />
+        </UFormField>
+
+        <UFormField label="Статус" name="status">
+          <USelect
+            v-model="state.status"
+            :items="props.statuses"
+            placeholder="Статус"
+          />
         </UFormField>
 
         <UButton type="submit">Добавить</UButton>
@@ -69,11 +79,12 @@ const props = defineProps<{
 const emit = defineEmits<{ close: any }>();
 
 const state = reactive<Partial<SetStatusSchema>>({
-  executor: '',
-  status: '',
+  executor: undefined,
+  status: undefined,
 });
 
 async function setStatus(event: FormSubmitEvent<SetStatusSchema>) {
   const data = toRaw(event.data);
+  console.log(data);
 }
 </script>
