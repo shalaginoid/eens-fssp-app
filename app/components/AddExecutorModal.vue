@@ -13,6 +13,14 @@
         class="space-y-4"
         @submit="addExecutor"
       >
+        <UAlert
+          v-if="errorMessage"
+          class="mb-4"
+          color="error"
+          variant="soft"
+          :description="errorMessage"
+        ></UAlert>
+
         <UFormField
           label="Фамилия и инициалы"
           description="Например, Иванов И.И."
@@ -39,10 +47,13 @@ type Executor = {
 const emit = defineEmits<{ close: any }>();
 
 const state = reactive<Partial<AddExecutorSchema>>({
-  fullname: 'Иванов И.И.',
+  fullname: '',
 });
 
+const errorMessage = ref(null);
+
 async function addExecutor(event: FormSubmitEvent<AddExecutorSchema>) {
+  errorMessage.value = null;
   const data = toRaw(event.data);
 
   try {
@@ -60,7 +71,7 @@ async function addExecutor(event: FormSubmitEvent<AddExecutorSchema>) {
       emit('close', insertedData);
     }
   } catch (error: any) {
-    console.log(error.message);
+    errorMessage.value = error.message;
   }
 }
 </script>

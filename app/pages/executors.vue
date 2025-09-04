@@ -85,8 +85,18 @@ async function openAddExecutorModal() {
 const editExecutorModal = overlay.create(EditExecutorModal);
 
 async function openEditExecutorModal(data: Executor) {
-  await editExecutorModal.open({
+  const executor: Executor = await editExecutorModal.open({
     data,
   });
+
+  if (executor) {
+    const find = executors.value.find((item: any) => item.id === executor.id);
+    find.executor = executor.executor;
+
+    toast.add({
+      description: 'Исполнитель успешно изменен',
+      color: 'success',
+    });
+  }
 }
 </script>
