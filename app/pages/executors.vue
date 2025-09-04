@@ -8,6 +8,11 @@
         :columns="columns"
         class="mb-4"
         empty="Нет данных"
+        :ui="{
+          base: 'min-w-full overflow-auto',
+          th: 'py-2 px-1.5',
+          td: 'whitespace-normal py-2 px-1.5',
+        }"
       >
         <template #actions-cell="{ row }">
           <UButton
