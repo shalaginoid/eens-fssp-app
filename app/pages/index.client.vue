@@ -208,7 +208,6 @@
             :columns="columns"
             :loading="loading"
             :ui="{
-              base: 'min-w-full overflow-auto',
               th: 'text-xs py-1 px-1.5',
               td: 'whitespace-normal py-1 px-1.5 text-xs',
             }"

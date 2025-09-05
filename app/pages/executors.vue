@@ -9,9 +9,8 @@
         class="mb-4"
         empty="Нет данных"
         :ui="{
-          base: 'min-w-full overflow-auto',
           th: 'p-3',
-          td: 'whitespace-normal py-3 aligb',
+          td: 'whitespace-normal py-3 ',
         }"
       >
         <template #actions-cell="{ row }">
@@ -68,7 +67,11 @@ type Executor = {
 const executors = ref();
 
 onMounted(async () => {
-  executors.value = await $fetch<Executor[]>('/api/executors');
+  try {
+    executors.value = await $fetch<Executor[]>('/api/executors');
+  } catch (error: any) {
+    console.log(error.message);
+  }
 });
 
 const columns: TableColumn<Executor>[] = [
