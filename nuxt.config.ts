@@ -1,9 +1,6 @@
 import db from './db.js';
 
 export default defineNuxtConfig({
-  future: {
-    compatibilityVersion: 4,
-  },
   app: {
     baseURL: '/eens-fssp/',
     head: {
@@ -53,6 +50,6 @@ export default defineNuxtConfig({
     },
   },
 
-  compatibilityDate: '2025-07-15',
+  compatibilityDate: '2025-09-01',
   devtools: { enabled: false },
 });
