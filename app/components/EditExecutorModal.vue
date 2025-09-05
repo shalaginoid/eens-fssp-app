@@ -1,6 +1,6 @@
 <template>
   <UModal :close="{ onClick: () => emit('close', false) }">
-    <template #title>Редактирование исполнителя</template>
+    <template #title>Редактирование исполнителя: {{ data.executor }}</template>
 
     <template #description>
       Исполнитель изменится также в разделе уведомлений

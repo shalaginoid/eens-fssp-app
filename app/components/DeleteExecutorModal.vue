@@ -1,6 +1,6 @@
 <template>
   <UModal :close="{ onClick: () => emit('close', false) }">
-    <template #title>Удаление исполнителя</template>
+    <template #title>Удаление исполнителя: {{ data.executor }}</template>
 
     <template #description>
       Вы уверены, что хотите удалить исполнителя?

@@ -293,13 +293,15 @@
           />
         </div>
 
-        <div
-          v-if="table?.tableApi?.getFilteredRowModel().rows.length > 0"
-          class="text-center text-sm"
-        >
-          Общее количество:
-          {{ table?.tableApi?.getFilteredRowModel().rows.length }}
-        </div>
+        <ClientOnly>
+          <div
+            v-if="table?.tableApi?.getFilteredRowModel().rows.length > 0"
+            class="text-center text-sm"
+          >
+            Общее количество:
+            {{ table?.tableApi?.getFilteredRowModel().rows.length }}
+          </div>
+        </ClientOnly>
       </UCard>
     </div>
   </div>
