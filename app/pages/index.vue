@@ -297,7 +297,6 @@
 <script setup lang="ts">
 import moment from 'moment';
 import 'moment/dist/locale/ru';
-// @ts-ignore
 import JsonExcel from 'vue-json-excel3';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import type { TableColumn } from '@nuxt/ui';
