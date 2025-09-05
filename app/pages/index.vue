@@ -278,7 +278,10 @@
         </div>
 
         <!-- Пагинация -->
-        <div class="border-default flex justify-center border-t pt-4">
+        <div
+          v-if="table?.tableApi?.getFilteredRowModel().rows.length > 0"
+          class="border-default mb-4 flex justify-center border-t pt-4"
+        >
           <UPagination
             size="sm"
             :default-page="
@@ -286,8 +289,16 @@
             "
             :items-per-page="table?.tableApi?.getState().pagination.pageSize"
             :total="table?.tableApi?.getFilteredRowModel().rows.length"
-            @update:page="(p) => table?.tableApi?.setPageIndex(p - 1)"
+            @update:page="(p: any) => table?.tableApi?.setPageIndex(p - 1)"
           />
+        </div>
+
+        <div
+          v-if="table?.tableApi?.getFilteredRowModel().rows.length > 0"
+          class="text-center text-sm"
+        >
+          Общее количество:
+          {{ table?.tableApi?.getFilteredRowModel().rows.length }}
         </div>
       </UCard>
     </div>
