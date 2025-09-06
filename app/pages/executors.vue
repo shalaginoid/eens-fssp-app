@@ -17,6 +17,7 @@
           <div class="flex gap-4">
             <UButton
               @click="openEditExecutorModal(row.original)"
+              size="md"
               icon="i-lucide-settings"
               variant="link"
               color="neutral"
