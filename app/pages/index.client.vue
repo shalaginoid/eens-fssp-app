@@ -47,21 +47,54 @@
           </ClientOnly>
         </div>
 
-        <USelect
-          size="md"
-          :items="subjectTypesValues"
-          :model-value="
-            table?.tableApi
-              ?.getColumn('fssp:DebtorType')
-              ?.getFilterValue() as string
-          "
-          placeholder="Тип должника"
-          @update:model-value="
-            table?.tableApi
-              ?.getColumn('fssp:DebtorType')
-              ?.setFilterValue($event)
-          "
-        />
+        <div class="grid grid-cols-2 gap-2">
+          <UDropdownMenu
+            :items="
+              table?.tableApi
+                ?.getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return {
+                    label: column.columnDef.header as string,
+                    type: 'checkbox' as const,
+                    checked: column.getIsVisible(),
+                    onUpdateChecked(checked: boolean) {
+                      table?.tableApi
+                        ?.getColumn(column.id)
+                        ?.toggleVisibility(!!checked);
+                    },
+                    onSelect(e?: Event) {
+                      e?.preventDefault();
+                    },
+                  };
+                })
+            "
+          >
+            <UButton
+              label="Столбцы"
+              color="neutral"
+              variant="outline"
+              trailing-icon="i-lucide-chevron-down"
+              class="flex justify-between"
+            />
+          </UDropdownMenu>
+
+          <USelect
+            size="md"
+            :items="subjectTypesValues"
+            :model-value="
+              table?.tableApi
+                ?.getColumn('fssp:DebtorType')
+                ?.getFilterValue() as string
+            "
+            placeholder="Тип должника"
+            @update:model-value="
+              table?.tableApi
+                ?.getColumn('fssp:DebtorType')
+                ?.setFilterValue($event)
+            "
+          />
+        </div>
 
         <USelect
           size="md"
@@ -199,6 +232,7 @@
             ref="table"
             empty="Нет данных"
             loading-color="secondary"
+            v-model:column-visibility="columnVisibility"
             v-model:pagination="pagination"
             v-model:column-filters="columnFilters"
             :pagination-options="{
@@ -212,6 +246,11 @@
               td: 'whitespace-normal py-1 px-1.5 text-xs',
             }"
           >
+            <!-- Message ID -->
+            <template #messageId-cell="{ row }">
+              {{ row.original.messageId }}
+            </template>
+
             <!-- Статус -->
             <template #status-cell="{ row }">
               <UTooltip
@@ -278,7 +317,7 @@
 
         <!-- Пагинация -->
         <div
-          v-if="table?.tableApi?.getFilteredRowModel().rows.length > 0"
+          v-if="table?.tableApi?.getFilteredRowModel().rows.length !== 0"
           class="border-default mb-4 flex justify-center border-t pt-4"
         >
           <UPagination
@@ -294,7 +333,7 @@
 
         <ClientOnly>
           <div
-            v-if="table?.tableApi?.getFilteredRowModel().rows.length > 0"
+            v-if="table?.tableApi?.getFilteredRowModel().rows.length !== 0"
             class="text-center text-sm"
           >
             Общее количество:
@@ -307,6 +346,7 @@
 </template>
 
 <script setup lang="ts">
+import { upperFirst } from 'scule';
 import moment from 'moment';
 import 'moment/dist/locale/ru';
 import JsonExcel from 'vue-json-excel3';
@@ -426,10 +466,18 @@ function downloadPDF(pdf: any, fileName: any, mimeType: any) {
   downloadLink.click();
 }
 
+const columnVisibility = ref({
+  messageId: false,
+});
+
 const columns: TableColumn<Message>[] = [
   {
     accessorKey: 'status',
     header: 'Статус',
+  },
+  {
+    accessorKey: 'messageId',
+    header: 'ID сообщения',
   },
   {
     accessorKey: 'executor',
