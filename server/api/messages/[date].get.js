@@ -57,6 +57,7 @@ export default defineEventHandler(async (event) => {
                 : parsedData.data['fssp:DebtorType'],
         'fssp:DbtrName': parsedData.data['fssp:DbtrName'],
         'fssp:DocName': parsedData.data['fssp:DocName'],
+        'fssp:DocDate': parsedData.data['fssp:DocDate'],
         'fssp:IpNo': parsedData.data['fssp:IpNo'],
         'fssp:IpRiseDate': parsedData.data['fssp:IpRiseDate'],
         'fssp:TotalArrestDebtSum': parsedData.data['fssp:TotalArrestDebtSum'],

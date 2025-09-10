@@ -22,7 +22,7 @@
                 'Наименование должника': 'fssp:DbtrName',
                 'Наименование документа': 'fssp:DocName',
                 'Номер исп. производства': 'fssp:IpNo',
-                'Дата документа': 'fssp:IpRiseDate',
+                'Дата документа': 'fssp:DocDate',
                 Сумма: 'fssp:TotalArrestDebtSum',
                 'Сумма (по сводному производству)': 'fssp:IdDebtSum',
                 'Номер исп. листа': 'fssp:IdDocNo',
@@ -161,14 +161,12 @@
           size="md"
           :model-value="
             table?.tableApi
-              ?.getColumn('fssp:IpRiseDate')
+              ?.getColumn('fssp:DocDate')
               ?.getFilterValue() as string
           "
           placeholder="Дата документа"
           @update:model-value="
-            table?.tableApi
-              ?.getColumn('fssp:IpRiseDate')
-              ?.setFilterValue($event)
+            table?.tableApi?.getColumn('fssp:DocDate')?.setFilterValue($event)
           "
         />
 
@@ -397,7 +395,7 @@ const columnFilters = ref([
     value: '',
   },
   {
-    id: 'fssp:IpRiseDate',
+    id: 'fssp:DocDate',
     value: '',
   },
   {
@@ -445,7 +443,7 @@ type Message = {
   'fssp:DbtrName': string | null;
   'fssp:DocName': string | null;
   'fssp:IpNo': string | null;
-  'fssp:IpRiseDate': string | null;
+  'fssp:DocDate': string | null;
   'fssp:TotalArrestDebtSum': string | null;
   'fssp:IdDocNo': string | null;
   'fssp:IdDocDate': string | null;
@@ -518,7 +516,7 @@ const columns: TableColumn<Message>[] = [
     header: 'Номер исп. производства',
   },
   {
-    accessorKey: 'fssp:IpRiseDate',
+    accessorKey: 'fssp:DocDate',
     header: 'Дата документа',
   },
   {

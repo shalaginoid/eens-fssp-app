@@ -59,7 +59,7 @@ type Message = {
   'fssp:DbtrName': string | null;
   'fssp:DocName': string | null;
   'fssp:IpNo': string | null;
-  'fssp:IpRiseDate': string | null;
+  'fssp:DocDate': string | null;
   'fssp:TotalArrestDebtSum': string | null;
   'fssp:IdDocNo': string | null;
   'fssp:IdDocDate': string | null;
