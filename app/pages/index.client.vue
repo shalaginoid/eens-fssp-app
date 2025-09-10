@@ -246,7 +246,12 @@
               td: 'whitespace-normal py-1 px-1.5 text-xs',
             }"
           >
-            <!-- Message ID -->
+            <!-- ID уведомления -->
+            <template #notifyId-cell="{ row }">
+              {{ row.original.notifyId }}
+            </template>
+
+            <!-- ID сообщения -->
             <template #messageId-cell="{ row }">
               {{ row.original.messageId }}
             </template>
@@ -346,7 +351,6 @@
 </template>
 
 <script setup lang="ts">
-import { upperFirst } from 'scule';
 import moment from 'moment';
 import 'moment/dist/locale/ru';
 import JsonExcel from 'vue-json-excel3';
@@ -429,6 +433,7 @@ const executors = ref();
 const executorsValues = ref();
 
 type Message = {
+  notifyId: number;
   messageId: number;
   notifyDate: string;
   executorId: string;
@@ -468,12 +473,17 @@ function downloadPDF(pdf: any, fileName: any, mimeType: any) {
 
 const columnVisibility = ref({
   messageId: false,
+  notifyId: false,
 });
 
 const columns: TableColumn<Message>[] = [
   {
     accessorKey: 'status',
     header: 'Статус',
+  },
+  {
+    accessorKey: 'notifyId',
+    header: 'ID уведомления',
   },
   {
     accessorKey: 'messageId',

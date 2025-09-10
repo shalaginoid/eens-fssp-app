@@ -40,6 +40,7 @@ export default defineEventHandler(async (event) => {
       return {
         id: item.id,
         messageId: +item.messageId,
+        notifyId: item.notifyId,
         notifyDate: item.notifyDate,
         executorId: item.executorId,
         executor: item.executor,
