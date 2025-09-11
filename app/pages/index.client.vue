@@ -79,6 +79,7 @@
             />
           </UDropdownMenu>
 
+          <!-- Тип должника -->
           <USelect
             size="md"
             :items="subjectTypesValues"
@@ -369,58 +370,6 @@ const overlay = useOverlay();
 
 const table = useTemplateRef('table');
 
-const columnFilters = ref([
-  {
-    id: 'fssp:DebtorType',
-    value: '',
-  },
-  // {
-  //   id: 'status',
-  //   value: null,
-  // },
-  // {
-  //   id: 'executor',
-  //   value: undefined,
-  // },
-  {
-    id: 'fssp:DocName',
-    value: '',
-  },
-  {
-    id: 'fssp:DbtrName',
-    value: '',
-  },
-  {
-    id: 'fssp:IpNo',
-    value: '',
-  },
-  {
-    id: 'fssp:DocDate',
-    value: '',
-  },
-  {
-    id: 'fssp:IdDocNo',
-    value: '',
-  },
-  {
-    id: 'fssp:IdDeloNo',
-    value: '',
-  },
-  {
-    id: 'fssp:Spi',
-    value: '',
-  },
-  {
-    id: 'fssp:IdCrdrName',
-    value: '',
-  },
-]);
-
-const pagination = ref({
-  pageIndex: 0,
-  pageSize: 25,
-});
-
 const messages = ref();
 const loading = ref(false);
 const selectedDate: any = ref(useGetMonths()[0]);
@@ -429,6 +378,18 @@ const statuses = ref();
 const statusesValues = ref();
 const executors = ref();
 const executorsValues = ref();
+
+const columnFilters = ref([
+  // {
+  //   id: 'fssp:DebtorType',
+  //   value: subjectTypesValues.value,
+  // },
+]);
+
+const pagination = ref({
+  pageIndex: 0,
+  pageSize: 25,
+});
 
 type Message = {
   notifyId: number;
@@ -557,7 +518,10 @@ async function getMessages(date: string | undefined) {
   try {
     loading.value = true;
     const response = await $fetch<Message[]>(`/api/messages/${date}`);
-    messages.value = response.filter((value: any) => value != null);
+    console.log(response.length);
+
+    // messages.value = response.filter((value: any) => value != null);
+    messages.value = response;
   } catch (error: any) {
     console.log(error.message);
   } finally {
