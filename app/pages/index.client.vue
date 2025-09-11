@@ -382,7 +382,7 @@ const executorsValues = ref();
 const columnFilters = ref([
   // {
   //   id: 'fssp:DebtorType',
-  //   value: subjectTypesValues.value,
+  //   value: ['ЮЛ', 'ФЛ', 'ИП'],
   // },
 ]);
 
