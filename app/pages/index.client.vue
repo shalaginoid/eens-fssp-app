@@ -80,7 +80,16 @@
           </UDropdownMenu>
 
           <!-- Тип должника -->
-          <USelect
+          <USelectMenu
+            :items="subjectTypesValues"
+            :search-input="false"
+            v-model="qwerty"
+            placeholder="Тип должника"
+            size="md"
+            multiple
+          />
+
+          <!-- <USelect
             size="md"
             :items="subjectTypesValues"
             :model-value="
@@ -94,7 +103,7 @@
                 ?.getColumn('fssp:DebtorType')
                 ?.setFilterValue($event)
             "
-          />
+          /> -->
         </div>
 
         <USelect
@@ -233,11 +242,10 @@
             loading-color="secondary"
             v-model:column-visibility="columnVisibility"
             v-model:pagination="pagination"
-            v-model:column-filters="columnFilters"
             :pagination-options="{
               getPaginationRowModel: getPaginationRowModel(),
             }"
-            :data="messages"
+            :data="filteredMessages"
             :columns="columns"
             :loading="loading"
             :ui="{
@@ -373,18 +381,29 @@ const table = useTemplateRef('table');
 const messages = ref();
 const loading = ref(false);
 const selectedDate: any = ref(useGetMonths()[0]);
-const subjectTypesValues = ref(['ЮЛ', 'ФЛ', 'ИП']);
+const subjectTypesValues: any = ref([
+  {
+    type: 'label',
+    label: 'Тип должника',
+  },
+  'ЮЛ',
+  'ФЛ',
+  'ИП',
+]);
 const statuses = ref();
 const statusesValues = ref();
 const executors = ref();
 const executorsValues = ref();
 
-const columnFilters = ref([
-  // {
-  //   id: 'fssp:DebtorType',
-  //   value: ['ЮЛ', 'ФЛ', 'ИП'],
-  // },
-]);
+const qwerty = ref(['ЮЛ', 'ФЛ', 'ИП']);
+
+const filteredMessages = computed(() => {
+  if (messages.value) {
+    return messages.value.filter((value: any) =>
+      qwerty.value.includes(value['fssp:DebtorType']),
+    );
+  }
+});
 
 const pagination = ref({
   pageIndex: 0,
@@ -518,10 +537,9 @@ async function getMessages(date: string | undefined) {
   try {
     loading.value = true;
     const response = await $fetch<Message[]>(`/api/messages/${date}`);
-    console.log(response.length);
 
-    // messages.value = response.filter((value: any) => value != null);
-    messages.value = response;
+    messages.value = response.filter((value: any) => value != null);
+    // messages.value = response;
   } catch (error: any) {
     console.log(error.message);
   } finally {
