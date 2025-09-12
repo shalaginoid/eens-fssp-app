@@ -25,9 +25,21 @@ onMounted(async () => {
   await getStatistic();
 });
 
+type Statistic = {
+  accepted: StatisticItem[];
+  inProgress: StatisticItem[];
+  completed: StatisticItem[];
+};
+
+type StatisticItem = {
+  month: string;
+  status: string;
+  quantity: string;
+};
+
 const getStatistic = async () => {
   try {
-    const response = await $fetch('/api/statistic');
+    const response = await $fetch<Statistic>('/api/statistic');
 
     const accepted = response.accepted;
     const inProgress = response.inProgress;
