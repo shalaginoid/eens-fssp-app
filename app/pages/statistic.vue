@@ -58,6 +58,7 @@ const getStatistic = async () => {
     const accepted = response.accepted;
     const inProgress = response.inProgress;
     const complete = response.completed;
+
     const acceptedArray = [];
     const inProgressArray = [];
     const completeArray = [];
@@ -65,6 +66,7 @@ const getStatistic = async () => {
     for (let i = 0; i < 12; i++) {
       const month = moment().month(i).format('YYYY-MM');
       const find = accepted.find((item) => item.month == month);
+
       if (find) {
         acceptedArray.push(find.quantity);
       } else {
@@ -75,6 +77,7 @@ const getStatistic = async () => {
     for (let i = 0; i < 12; i++) {
       const month = moment().month(i).format('YYYY-MM');
       const find = inProgress.find((item) => item.month == month);
+
       if (find) {
         inProgressArray.push(find.quantity);
       } else {
@@ -85,6 +88,7 @@ const getStatistic = async () => {
     for (let i = 0; i < 12; i++) {
       const month = moment().month(i).format('YYYY-MM');
       const find = complete.find((item) => item.month == month);
+
       if (find) {
         completeArray.push(find.quantity);
       } else {
