@@ -83,7 +83,7 @@
           <USelectMenu
             :items="subjectTypesValues"
             :search-input="false"
-            v-model="qwerty"
+            v-model="subjectTypesDefaultValue"
             placeholder="Тип должника"
             size="md"
             multiple
@@ -381,6 +381,8 @@ const table = useTemplateRef('table');
 const messages = ref();
 const loading = ref(false);
 const selectedDate: any = ref(useGetMonths()[0]);
+
+const subjectTypesDefaultValue = ref(['ЮЛ', 'ФЛ', 'ИП']);
 const subjectTypesValues: any = ref([
   {
     type: 'label',
@@ -395,12 +397,10 @@ const statusesValues = ref();
 const executors = ref();
 const executorsValues = ref();
 
-const qwerty = ref(['ЮЛ', 'ФЛ', 'ИП']);
-
 const filteredMessages = computed(() => {
   if (messages.value) {
     return messages.value.filter((value: any) =>
-      qwerty.value.includes(value['fssp:DebtorType']),
+      subjectTypesDefaultValue.value.includes(value['fssp:DebtorType']),
     );
   }
 });
@@ -588,6 +588,26 @@ async function getExecutors() {
     };
   });
 }
+
+const items = ref([
+  {
+    label: 'Статус',
+    value: '',
+  },
+  {
+    label: 'В работе',
+    value: 'В работе',
+  },
+  {
+    label: 'Завершено',
+    value: 'Завершено',
+  },
+]);
+
+const value = ref({
+  label: 'Статус',
+  value: '',
+});
 
 async function getStatuses() {
   const response = await $fetch('/api/statuses');
