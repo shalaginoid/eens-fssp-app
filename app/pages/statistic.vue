@@ -3,6 +3,16 @@
     <UCard>
       <h1 class="mb-4 text-2xl font-bold">Статистика</h1>
 
+      <p v-if="loading">Загрузка...</p>
+
+      <UAlert
+        v-if="errorMessage"
+        :description="errorMessage"
+        class="mb-4"
+        color="error"
+        variant="soft"
+      ></UAlert>
+
       <GosuslugiBar :data="data" />
     </UCard>
   </UContainer>
@@ -37,7 +47,12 @@ type StatisticItem = {
   quantity: string;
 };
 
+const loading = ref(false);
+const errorMessage = ref(null);
+
 const getStatistic = async () => {
+  loading.value = true;
+
   try {
     const response = await $fetch<Statistic>('/api/statistic');
 
@@ -90,6 +105,10 @@ const getStatistic = async () => {
         { label: 'Завершено', data: completeArray, backgroundColor: '#4CAF50' },
       ],
     };
-  } catch (error: any) {}
+  } catch (error: any) {
+    errorMessage.value = error.message;
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
