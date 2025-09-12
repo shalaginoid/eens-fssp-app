@@ -80,16 +80,16 @@
           </UDropdownMenu>
 
           <!-- Тип должника -->
-          <USelectMenu
+          <!-- <USelectMenu
             :items="subjectTypesValues"
             :search-input="false"
             v-model="subjectTypesDefaultValue"
             placeholder="Тип должника"
             size="md"
             multiple
-          />
+          /> -->
 
-          <!-- <USelect
+          <USelect
             size="md"
             :items="subjectTypesValues"
             :model-value="
@@ -103,16 +103,15 @@
                 ?.getColumn('fssp:DebtorType')
                 ?.setFilterValue($event)
             "
-          /> -->
+          />
         </div>
 
         <USelect
-          size="md"
           :items="statusesValues"
+          placeholder="Статус"
           :model-value="
             table?.tableApi?.getColumn('status')?.getFilterValue() as string
           "
-          placeholder="Статус"
           @update:model-value="
             table?.tableApi?.getColumn('status')?.setFilterValue($event)
           "
@@ -245,7 +244,7 @@
             :pagination-options="{
               getPaginationRowModel: getPaginationRowModel(),
             }"
-            :data="filteredMessages"
+            :data="messages"
             :columns="columns"
             :loading="loading"
             :ui="{
@@ -382,11 +381,10 @@ const messages = ref();
 const loading = ref(false);
 const selectedDate: any = ref(useGetMonths()[0]);
 
-const subjectTypesDefaultValue = ref(['ЮЛ', 'ФЛ', 'ИП']);
 const subjectTypesValues: any = ref([
   {
-    type: 'label',
-    label: 'Тип должника',
+    label: 'Любой',
+    value: null,
   },
   'ЮЛ',
   'ФЛ',
@@ -396,14 +394,6 @@ const statuses = ref();
 const statusesValues = ref();
 const executors = ref();
 const executorsValues = ref();
-
-const filteredMessages = computed(() => {
-  if (messages.value) {
-    return messages.value.filter((value: any) =>
-      subjectTypesDefaultValue.value.includes(value['fssp:DebtorType']),
-    );
-  }
-});
 
 const pagination = ref({
   pageIndex: 0,
@@ -581,6 +571,11 @@ async function getExecutors() {
     };
   });
 
+  executorsValues.value.unshift({
+    label: 'Любой',
+    value: null,
+  });
+
   executors.value = data.map((item) => {
     return {
       label: item.executor,
@@ -589,30 +584,20 @@ async function getExecutors() {
   });
 }
 
-const items = ref([
-  {
-    label: 'Статус',
-    value: '',
-  },
-  {
-    label: 'В работе',
-    value: 'В работе',
-  },
-  {
-    label: 'Завершено',
-    value: 'Завершено',
-  },
-]);
-
-const value = ref({
-  label: 'Статус',
-  value: '',
-});
-
 async function getStatuses() {
   const response = await $fetch('/api/statuses');
 
-  statusesValues.value = response.map((item) => item.status);
+  statusesValues.value = response.map((item) => {
+    return {
+      label: item.status,
+      value: item.status,
+    };
+  });
+
+  statusesValues.value.unshift({
+    label: 'Любой',
+    value: null,
+  });
 
   statuses.value = response.map((item) => {
     return {
