@@ -51,9 +51,8 @@ const loading = ref(false);
 const errorMessage = ref(null);
 
 const getStatistic = async () => {
-  loading.value = true;
-
   try {
+    loading.value = true;
     const response = await $fetch<Statistic>('/api/statistic');
 
     const accepted = response.accepted;
