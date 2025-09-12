@@ -13,6 +13,10 @@
   @apply text-secondary border-secondary/30 hover:text-secondary/70 hover:border-secondary/15 border-b transition-colors;
 }
 
+.link.modal {
+  @apply border-dashed;
+}
+
 .table {
   @apply min-w-full border-gray-200 bg-white;
 }
