@@ -1,11 +1,15 @@
 <template>
   <NuxtLayout>
     <UContainer class="my-8">
-      <h1 class="text-3xl font-bold">{{ error?.statusCode }}</h1>
+      <UAlert color="error" variant="soft">
+        <template #title>
+          <h1>{{ props.error?.statusCode }}</h1>
+        </template>
 
-      <div>{{ props.error?.message }}</div>
-
-      <!-- <button @click="handleError">На главную</button> -->
+        <template #description>
+          {{ props.error?.message }}
+        </template>
+      </UAlert>
     </UContainer>
   </NuxtLayout>
 </template>
@@ -16,6 +20,4 @@ import type { NuxtError } from '#app';
 const props = defineProps({
   error: Object as () => NuxtError,
 });
-
-const handleError = () => clearError({ redirect: '/' });
 </script>
