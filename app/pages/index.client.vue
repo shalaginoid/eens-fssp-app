@@ -299,21 +299,13 @@
 
             <!-- Исполнитель -->
             <template #executor-cell="{ row }">
-              <!-- <UButton
+              <UButton
                 :label="row.original.executor ?? 'Назначить'"
                 @click="openSetStatusModal(row.original)"
                 color="neutral"
-                variant="link"
+                variant="soft"
                 size="xs"
-              /> -->
-
-              <ULink
-                @click="openSetStatusModal(row.original)"
-                :label="row.original.executor ?? 'Назначить'"
-                class="border-b border-dashed whitespace-nowrap"
-              >
-                {{ row.original.executor ?? 'Назначить' }}
-              </ULink>
+              />
             </template>
 
             <!-- Дата уведомления -->
