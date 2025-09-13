@@ -47,64 +47,54 @@
           </ClientOnly>
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
-          <UDropdownMenu
-            :items="
-              table?.tableApi
-                ?.getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return {
-                    label: column.columnDef.header as string,
-                    type: 'checkbox' as const,
-                    checked: column.getIsVisible(),
-                    onUpdateChecked(checked: boolean) {
-                      table?.tableApi
-                        ?.getColumn(column.id)
-                        ?.toggleVisibility(!!checked);
-                    },
-                    onSelect(e?: Event) {
-                      e?.preventDefault();
-                    },
-                  };
-                })
-            "
-          >
-            <UButton
-              label="Столбцы"
-              color="neutral"
-              variant="outline"
-              trailing-icon="i-lucide-chevron-down"
-              class="flex justify-between"
-            />
-          </UDropdownMenu>
-
-          <!-- Тип должника -->
-          <!-- <USelectMenu
-            :items="subjectTypesValues"
-            :search-input="false"
-            v-model="subjectTypesDefaultValue"
-            placeholder="Тип должника"
-            size="md"
-            multiple
-          /> -->
-
-          <USelect
-            size="md"
-            :items="subjectTypesValues"
-            :model-value="
-              table?.tableApi
-                ?.getColumn('fssp:DebtorType')
-                ?.getFilterValue() as string
-            "
-            placeholder="Тип должника"
-            @update:model-value="
-              table?.tableApi
-                ?.getColumn('fssp:DebtorType')
-                ?.setFilterValue($event)
-            "
+        <!--<div class="grid grid-cols-2 gap-2"></div>-->
+        <UDropdownMenu
+          :items="
+            table?.tableApi
+              ?.getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return {
+                  label: column.columnDef.header as string,
+                  type: 'checkbox' as const,
+                  checked: column.getIsVisible(),
+                  onUpdateChecked(checked: boolean) {
+                    table?.tableApi
+                      ?.getColumn(column.id)
+                      ?.toggleVisibility(!!checked);
+                  },
+                  onSelect(e?: Event) {
+                    e?.preventDefault();
+                  },
+                };
+              })
+          "
+        >
+          <UButton
+            label="Столбцы"
+            color="neutral"
+            variant="outline"
+            trailing-icon="i-lucide-chevron-down"
+            class="flex justify-between"
           />
-        </div>
+        </UDropdownMenu>
+
+        <!-- Тип должника -->
+        <USelect
+          size="md"
+          :items="subjectTypesValues"
+          :model-value="
+            table?.tableApi
+              ?.getColumn('fssp:DebtorType')
+              ?.getFilterValue() as string
+          "
+          placeholder="Тип должника"
+          @update:model-value="
+            table?.tableApi
+              ?.getColumn('fssp:DebtorType')
+              ?.setFilterValue($event)
+          "
+        />
 
         <USelect
           :items="statusesValues"
@@ -216,6 +206,7 @@
           "
         />
 
+        <!--
         <UInput
           size="md"
           :model-value="
@@ -230,6 +221,7 @@
               ?.setFilterValue($event)
           "
         />
+        -->
       </div>
 
       <UCard>
@@ -442,6 +434,7 @@ function downloadPDF(pdf: any, fileName: any, mimeType: any) {
 const columnVisibility = ref({
   messageId: false,
   notifyId: false,
+  'fssp:IdCrdrName': false,
 });
 
 const columns: TableColumn<Message>[] = [
