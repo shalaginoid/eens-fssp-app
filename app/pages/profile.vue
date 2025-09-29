@@ -7,7 +7,7 @@
             :src="avatar"
             icon="i-mdi-account"
             size="3xl"
-            class="h-20 w-20 rounded border-1 border-neutral-300 bg-white p-0.5"
+            class="h-20 w-20 rounded bg-neutral-200 p-0.5"
           />
         </ClientOnly>
 
