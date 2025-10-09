@@ -5,12 +5,12 @@
         ...user,
         trailingIcon: 'i-lucide-chevron-down',
       }"
-      class="data-[state=open]:bg-elevated"
-      color="neutral"
-      variant="ghost"
       :ui="{
         trailingIcon: 'text-dimmed',
       }"
+      class="data-[state=open]:bg-elevated"
+      color="neutral"
+      variant="ghost"
     />
   </UDropdownMenu>
 </template>
@@ -42,7 +42,6 @@ const user = ref({
   avatar: {
     src: avatar.value,
     alt: username.value,
-    // icon: 'i-lucide-user',
   },
 });
 
