@@ -21,21 +21,7 @@
             <Spinner />
           </template>
 
-          <UDropdownMenu
-            mode="hover"
-            :items="dropdownMenu"
-            :ui="{
-              content: 'w-48',
-              label: 'font-normal text-muted',
-            }"
-          >
-            <UAvatar
-              :src="avatar"
-              icon="i-mdi-account"
-              size="sm"
-              class="cursor-pointer border-1 border-neutral-100"
-            />
-          </UDropdownMenu>
+          <UserMenu />
         </ClientOnly>
       </UContainer>
     </header>
@@ -50,6 +36,7 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui';
+import UserMenuClient from '~/components/UserMenu.client.vue';
 
 const { loggedIn, user, clear: clearSession } = useUserSession();
 
