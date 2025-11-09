@@ -26,12 +26,18 @@
     </UDropdownMenu>
 
     <template #fallback>
-      <div v-if="!collapsed" class="flex w-full items-center gap-1.5 px-4 py-2">
-        <USkeleton class="h-5 w-5 rounded-full" />
-
-        <div class="grid w-full gap-2">
-          <USkeleton class="h-4 w-full" />
+      <div v-if="!collapsed" class="flex w-full items-center gap-1.5 px-3 py-2">
+        <div class="flex-none">
+          <USkeleton class="h-5 w-5 rounded-full" />
         </div>
+
+        <div class="w-full">
+          <USkeleton class="h-5 w-full" />
+        </div>
+      </div>
+
+      <div v-else class="flex w-full items-center justify-center py-2">
+        <USkeleton class="h-5 w-5 rounded-full" />
       </div>
     </template>
   </ClientOnly>
