@@ -5,7 +5,20 @@
     class="space-y-4"
     @submit="onSubmit"
   >
-    <h1 class="mb-2 font-bold">Госпочта (ФССП)</h1>
+    <h1 class="mb-2 font-bold">{{ appName }}</h1>
+
+    <p class="text-muted text-sm">
+      Для предоставления доступа необходимо
+      <CustomLink
+        to="http://portal.eksbyt.ru/openv/Lists/openview/NewLNA4.aspx"
+        target="_blank"
+      >
+        подать заявку
+      </CustomLink>
+      в отдел сетевой инфраструктуры для включения в доменную группу «{{
+        appName
+      }}»
+    </p>
 
     <UAlert
       v-if="errorMessage"
@@ -15,25 +28,13 @@
       :description="errorMessage"
     ></UAlert>
 
-    <p class="text-muted text-sm">
-      Для предоставления доступа необходимо
-      <a
-        href="http://portal.eksbyt.ru/openv/Lists/openview/NewLNA4.aspx"
-        class="link"
-        target="_blank"
-      >
-        подать заявку
-      </a>
-      в отдел сетевой инфраструктуры для включения в доменную группу «Госпочта
-      ФССП»
-    </p>
-
     <UFormField name="email">
       <UInput
         class="w-full"
         v-model="state.email"
         icon="i-lucide-at-sign"
         placeholder="Эл. почта"
+        size="lg"
       />
     </UFormField>
 
@@ -45,6 +46,7 @@
         :type="show ? 'text' : 'password'"
         :ui="{ trailing: 'pe-1' }"
         placeholder="Пароль"
+        size="lg"
       >
         <template #trailing>
           <UButton
@@ -60,31 +62,24 @@
       </UInput>
     </UFormField>
 
-    <UButton :loading="loading" :disabled="!isMounted" type="submit" block>
-      Войти
-    </UButton>
+    <UButton :loading="loading" type="submit" size="lg" block>Войти</UButton>
   </UForm>
 </template>
 
 <script setup lang="ts">
-import { useMounted } from '@vueuse/core';
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type { LoginSchema } from '~~/shared/utils/schemas';
 
-const { fetch: refreshSession } = useUserSession();
+definePageMeta({ layout: 'login' });
 
-const isMounted = useMounted();
-
-const show = ref(false);
-
-definePageMeta({
-  layout: 'login',
-});
-
-useSeoMeta({
+useHead({
   title: 'Авторизация',
 });
 
+const {
+  public: { appName },
+} = useRuntimeConfig();
+
+const show = ref(false);
 const loading = ref(false);
 const errorMessage = ref(null);
 
@@ -93,23 +88,35 @@ const state = reactive<Partial<LoginSchema>>({
   password: '',
 });
 
+const { fetch: refreshSession } = useUserSession();
+
 async function onSubmit(event: FormSubmitEvent<LoginSchema>) {
-  const data = toRaw(event.data);
   loading.value = true;
   errorMessage.value = null;
 
   try {
     await $fetch('/api/login', {
       method: 'POST',
-      body: data,
+      body: event.data,
     });
 
     await refreshSession();
     await navigateTo('/');
   } catch (error: any) {
+    errorMessage.value = translate(error.data.statusMessage);
+  } finally {
     loading.value = false;
-    errorMessage.value = useTranslationErrors(error.data.statusMessage);
   }
+}
+
+function translate(errorMessage: string) {
+  const errors: any = {
+    Unauthorized: 'Неверный e-mail или пароль',
+    Forbidden: 'Доступ запрещен',
+    ECONNREFUSED: 'Ошибка сети',
+  };
+
+  return errors[errorMessage] || errorMessage;
 }
 </script>
 

@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import '@nuxt/ui';
+@source '../../../layers/**/*';
 
 @theme {
   --font-sans: 'Roboto', sans-serif;
@@ -22,7 +23,7 @@
 }
 
 .table tr {
-  @apply border-gray-200 [&:not(:last-child)]:border-b;
+  @apply border-gray-200 not-last:border-b;
 }
 
 .table td {

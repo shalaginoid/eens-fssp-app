@@ -9,28 +9,20 @@
           }"
           :items="mainMenu"
           :disableClickTrigger="true"
+          class="w-full"
           variant="pill"
           color="secondary"
-          class="w-full"
           content-orientation="vertical"
           highlightColor="error"
         ></UNavigationMenu>
 
-        <ClientOnly fallback-tag="div">
-          <template #fallback>
-            <Spinner />
-          </template>
-
-          <UserMenu />
-        </ClientOnly>
+        <UserMenu collapsed class="max-w-8" size="md" />
       </UContainer>
     </header>
 
     <main class="flex-1">
       <slot></slot>
     </main>
-
-    <Visitors />
   </div>
 </template>
 

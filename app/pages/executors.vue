@@ -47,11 +47,7 @@ import AddExecutorModal from '@/components/AddExecutorModal.vue';
 import EditExecutorModal from '@/components/EditExecutorModal.vue';
 import DeleteExecutorModal from '@/components/DeleteExecutorModal.vue';
 
-definePageMeta({
-  middleware: ['authenticated'],
-});
-
-useSeoMeta({
+useHead({
   title: 'Исполнители',
 });
 

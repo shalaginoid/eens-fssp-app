@@ -1,0 +1,15 @@
+import z from 'zod';
+import { ru } from 'zod/locales';
+
+z.config(ru());
+
+export const loginSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .min(1, 'Поле обязательно')
+    .email('Некорректный e-mail'),
+  password: z.string().trim().min(1, 'Поле обязательно'),
+});
+
+export type LoginSchema = z.output<typeof loginSchema>;

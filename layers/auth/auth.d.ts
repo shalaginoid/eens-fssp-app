@@ -2,6 +2,7 @@
 declare module '#auth-utils' {
   interface User {
     fullname?: string;
+    shortname?: string;
     firstname?: string;
     lastname?: string;
     initials?: string;
@@ -10,6 +11,7 @@ declare module '#auth-utils' {
     department?: string;
     jobTitle?: string;
     telephoneNumber: ?string;
+    status: ?string;
   }
 }
 

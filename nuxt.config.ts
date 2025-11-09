@@ -1,13 +1,14 @@
 import db from './db';
+import pkg from './package.json';
 
 export default defineNuxtConfig({
   app: {
-    baseURL: '/eens-fssp/',
+    baseURL: `/${pkg.name}/`,
     head: {
-      titleTemplate: '%s | Госпочта (ФССП)',
       htmlAttrs: {
         lang: 'ru',
       },
+      titleTemplate: `%s - ${pkg.description}`,
       link: [
         {
           rel: 'preconnect',
@@ -20,40 +21,23 @@ export default defineNuxtConfig({
       ],
     },
   },
+  modules: ['@nuxt/ui'],
   ui: {
     fonts: false,
     colorMode: false,
   },
-  modules: ['@nuxt/ui', 'nuxt-auth-utils'],
+  css: ['~/assets/css/main.css'],
   runtimeConfig: {
     dbConnectionString: db.connectString,
-    ldap: {
-      username: 'tfsiis',
-      password: 'Dem@Gandu42!HH7',
-    },
-    session: {
-      name: 'eens-fssp-app-session',
-      password: '801945b8c6c84388bqwe08768afe17f6',
-      cookie: {
-        sameSite: 'lax',
-        secure: false,
-      },
+    public: {
+      appName: pkg.description,
     },
   },
-  css: ['~/assets/css/main.css'],
   nitro: {
-    experimental: {
-      websocket: true,
-    },
     output: {
-      dir: 'eens-fssp',
-    },
-    iis: {
-      mergeConfig: true,
-      overrideConfig: false,
+      dir: pkg.name,
     },
   },
-
   compatibilityDate: '2025-10-02',
   devtools: { enabled: false },
 });

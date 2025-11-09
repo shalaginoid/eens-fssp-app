@@ -21,11 +21,7 @@
 <script lang="ts" setup>
 import moment from 'moment';
 
-definePageMeta({
-  middleware: ['authenticated'],
-});
-
-useSeoMeta({
+useHead({
   title: 'Статистика',
 });
 

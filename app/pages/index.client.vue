@@ -356,12 +356,8 @@ import { getPaginationRowModel } from '@tanstack/vue-table';
 import type { TableColumn } from '@nuxt/ui';
 import SetStatusModal from '@/components/SetStatusModal.vue';
 
-useSeoMeta({
+useHead({
   title: 'Уведомления',
-});
-
-definePageMeta({
-  middleware: ['authenticated'],
 });
 
 const toast = useToast();
