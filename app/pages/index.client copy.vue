@@ -3,18 +3,60 @@
     <template #header>
       <UDashboardNavbar title="Уведомления" />
 
-      <UDashboardToolbar class="bg-elevated/50 py-3">
-        <template #left>
-          <div class="grid grid-cols-6 gap-2">
-            <USelect
-              @change="changeDate(selectedDate.value)"
-              size="md"
-              v-model="selectedDate.value"
-              :items="useGetMonths()"
-              :loading="loading"
-            />
+      <UDashboardToolbar class="bg-elevated/50 pt-2 pb-4">
+        UDashboardToolbar
+      </UDashboardToolbar>
+    </template>
 
-            <!-- Столбцы -->
+    <template #body>
+      <div class="h-full">
+        <div class="h-full bg-white">
+          <div class="bg-elevated mb-4 grid grid-cols-6 gap-2 p-2">
+            <div class="grid grid-cols-2 gap-2">
+              <USelect
+                @change="changeDate(selectedDate.value)"
+                size="md"
+                v-model="selectedDate.value"
+                :items="useGetMonths()"
+                :loading="loading"
+              />
+
+              <!-- <ClientOnly>
+                <JsonExcel
+                  style="display: inline-block"
+                  :data="messages"
+                  :fields="{
+                    Исполнитель: 'executor',
+                    'Дата уведомления': 'notifyDate',
+                    'Тип должника': 'fssp:DebtorType',
+                    'Наименование должника': 'fssp:DbtrName',
+                    'Наименование документа': 'fssp:DocName',
+                    'Номер исп. производства': 'fssp:IpNo',
+                    'Дата документа': 'fssp:DocDate',
+                    Сумма: 'fssp:TotalArrestDebtSum',
+                    'Сумма (по сводному производству)': 'fssp:IdDebtSum',
+                    'Номер исп. листа': 'fssp:IdDocNo',
+                    'Дата исп. листа': 'fssp:IdDocDate',
+                    'Номер дела': 'fssp:IdDeloNo',
+                    'Дата дела': 'fssp:IdDeloDate',
+                    'ФИО пристава': 'fssp:Spi',
+                    Взыскатель: 'fssp:IdCrdrName',
+                  }"
+                  type="xlsx"
+                  :name="`${moment().format('YYYYMMDDHHmmss')}.xlsx`"
+                  worksheet="Выгрузка"
+                >
+                  <UButton
+                    label="Выгрузить"
+                    color="neutral"
+                    variant="outline"
+                    icon="i-mdi-microsoft-excel"
+                    class="w-full"
+                  />
+                </JsonExcel>
+              </ClientOnly> -->
+            </div>
+
             <UDropdownMenu
               :items="
                 table?.tableApi
@@ -189,7 +231,8 @@
               "
             />
 
-            <!-- <UInput
+            <!--
+            <UInput
               size="md"
               :model-value="
                 table?.tableApi
@@ -202,15 +245,10 @@
                   ?.getColumn('fssp:IdCrdrName')
                   ?.setFilterValue($event)
               "
-            /> -->
+            />
+            -->
           </div>
-        </template>
-      </UDashboardToolbar>
-    </template>
 
-    <template #body>
-      <div class="h-full">
-        <div class="h-full bg-white">
           <UCard>
             <div class="h-full">
               <UTable
