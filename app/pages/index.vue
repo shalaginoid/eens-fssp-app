@@ -216,21 +216,18 @@ const columns: TableColumn<Message>[] = [
     cell: ({ row }) => {
       const status = row.getValue('status');
 
-      return h('div', {
-        class: `w-1.5 h-1.5 rounded-full m-auto ${status === 'Завершено' ? 'bg-success' : status === 'В работе' ? 'bg-secondary' : 'bg-neutral-400'}`,
-      });
+      const color =
+        status === 'Завершено'
+          ? 'bg-success'
+          : status === 'В работе'
+            ? 'bg-secondary'
+            : 'bg-neutral-400';
 
-      // return h(UButton, {
-      //   color:
-      //     status === 'Завершено'
-      //       ? 'success'
-      //       : status === 'В работе'
-      //         ? 'secondary'
-      //         : 'neutral',
-      //   variant: 'link',
-      //   size: 'xs',
-      //   icon: 'i-lucide-info',
-      // });
+      return h(UTooltip, { text: status ?? 'Принято', delayDuration: 0 }, () =>
+        h('div', {
+          class: `w-1.5 h-1.5 rounded-full m-auto ${color}`,
+        }),
+      );
     },
   },
   {
@@ -258,6 +255,19 @@ const columns: TableColumn<Message>[] = [
   {
     accessorKey: 'download',
     header: 'Скачать документ',
+    meta: {
+      class: {
+        td: 'text-center',
+      },
+    },
+    cell: ({ row }) =>
+      h(UButton, {
+        color: 'neutral',
+        variant: 'link',
+        icon: 'i-lucide-file-text',
+        size: 'xs',
+        onClick: () => useFetchDoc(row.original.messageId),
+      }),
   },
   {
     accessorKey: 'fssp:DocName',
