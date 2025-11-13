@@ -181,11 +181,14 @@
 <script setup lang="ts">
 import moment from 'moment';
 import type { TableColumn } from '@nuxt/ui';
+import SetStatusModal from '@/components/SetStatusModal.vue';
 
 useHead({
   title: 'Уведомления',
 });
 
+const toast = useToast();
+const overlay = useOverlay();
 const table = useTemplateRef('table');
 const months = useGetMonths();
 const date = ref(months[0]?.value);
@@ -233,6 +236,14 @@ const columns: TableColumn<Message>[] = [
   {
     accessorKey: 'executor',
     header: 'Исполнитель',
+    cell: ({ row }) =>
+      h(UButton, {
+        label: row.original.executor ?? 'Назначить',
+        color: 'neutral',
+        variant: 'soft',
+        size: 'xs',
+        onClick: () => openSetStatusModal(row.original),
+      }),
   },
   {
     accessorKey: 'notifyDate',
@@ -323,12 +334,43 @@ const columns: TableColumn<Message>[] = [
   // },
 ];
 
-const { data: statuses } = await useFetch('/api/statuses');
-const { data: executors } = await useFetch('/api/executors');
+const { data: statuses } = await useFetch<Status[]>('/api/statuses');
+const { data: executors } = await useFetch<Executor[]>('/api/executors');
 const { data: messages, pending } = await useFetch<Message[]>('/api/messages', {
   lazy: true,
   query: {
     date,
   },
 });
+
+// Назначение статуса и исполнителя
+const setStatusModal = overlay.create(SetStatusModal);
+
+async function openSetStatusModal(message: Message) {
+  const result: any = await setStatusModal.open({
+    message: message,
+    statuses: statuses.value,
+    executors: executors.value,
+  });
+
+  // if (result) {
+  //   const findMessage = messages.value.find(
+  //     (item: Message) => item.messageId === result.messageId,
+  //   );
+  //   const executor = toRaw(executors.value).find(
+  //     (item: any) => item.value == result.executorId,
+  //   );
+  //   const status = toRaw(statuses.value).find(
+  //     (item: any) => item.value === result.statusId,
+  //   );
+  //   findMessage.executorId = result.executorId;
+  //   findMessage.statusId = result.statusId;
+  //   findMessage.executor = executor.label;
+  //   findMessage.status = status.label;
+  //   toast.add({
+  //     description: 'Статус и исполнитель успешно установлены',
+  //     color: 'success',
+  //   });
+  // }
+}
 </script>

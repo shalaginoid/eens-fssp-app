@@ -21,3 +21,13 @@ type Message = {
   'fssp:IdCrdrNam': string | null;
   'fssp:IdDebtSum': string | null;
 };
+
+type Status = {
+  id: number;
+  status: string;
+};
+
+type Executor = {
+  id: number;
+  executor: string;
+};

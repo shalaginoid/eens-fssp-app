@@ -5,7 +5,9 @@
     <template #description>Назначение исполнителя и установка статуса</template>
 
     <template #body>
-      <UForm
+      <pre>{{ props }}</pre>
+
+      <!-- <UForm
         :schema="setStatusSchema"
         :state="state"
         class="space-y-4"
@@ -38,47 +40,13 @@
         </UFormField>
 
         <UButton type="submit">Добавить</UButton>
-      </UForm>
+      </UForm> -->
     </template>
   </UModal>
 </template>
 
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type { SetStatusSchema } from '~~/shared/utils/schemas';
-
-type Message = {
-  messageId: number;
-  notifyDate: string;
-  executorId: string;
-  executor: string;
-  statusId: string;
-  status: string;
-  'fssp:Id': number | null;
-  'fssp:DebtorType': number | null;
-  'fssp:DbtrName': string | null;
-  'fssp:DocName': string | null;
-  'fssp:IpNo': string | null;
-  'fssp:DocDate': string | null;
-  'fssp:TotalArrestDebtSum': string | null;
-  'fssp:IdDocNo': string | null;
-  'fssp:IdDocDate': string | null;
-  'fssp:IdDeloNo': string | null;
-  'fssp:IdDeloDate': string | null;
-  'fssp:Spi': string | null;
-  'fssp:IdCrdrNam': string | null;
-  'fssp:IdDebtSum': string | null;
-};
-
-type Status = {
-  label: string;
-  value: number;
-};
-
-type Executor = {
-  label: string;
-  value: number;
-};
 
 const props = defineProps<{
   message: Message;
@@ -86,38 +54,36 @@ const props = defineProps<{
   executors: Array<Executor>;
 }>();
 
-console.log();
+// const emit = defineEmits<{ close: any }>();
 
-const emit = defineEmits<{ close: any }>();
+// const state = reactive<Partial<SetStatusSchema>>({
+//   executorId: Number(toRaw(props.message).executorId) || undefined,
+//   statusId: Number(toRaw(props.message).statusId) || undefined,
+// });
 
-const state = reactive<Partial<SetStatusSchema>>({
-  executorId: Number(toRaw(props.message).executorId) || undefined,
-  statusId: Number(toRaw(props.message).statusId) || undefined,
-});
+// const errorMessage = ref(null);
 
-const errorMessage = ref(null);
+// async function setStatus(event: FormSubmitEvent<SetStatusSchema>) {
+//   errorMessage.value = null;
+//   const data = toRaw(event.data);
 
-async function setStatus(event: FormSubmitEvent<SetStatusSchema>) {
-  errorMessage.value = null;
-  const data = toRaw(event.data);
+//   const body = {
+//     messageId: toRaw(props.message).messageId,
+//     statusId: data.statusId,
+//     executorId: data.executorId,
+//   };
 
-  const body = {
-    messageId: toRaw(props.message).messageId,
-    statusId: data.statusId,
-    executorId: data.executorId,
-  };
+//   try {
+//     const response = await $fetch.raw('/api/relations', {
+//       method: 'POST',
+//       body,
+//     });
 
-  try {
-    const response = await $fetch.raw('/api/relations', {
-      method: 'POST',
-      body,
-    });
-
-    if (response.status === 204) {
-      emit('close', body);
-    }
-  } catch (error: any) {
-    errorMessage.value = error.message;
-  }
-}
+//     if (response.status === 204) {
+//       emit('close', body);
+//     }
+//   } catch (error: any) {
+//     errorMessage.value = error.message;
+//   }
+// }
 </script>
