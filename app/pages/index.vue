@@ -7,6 +7,154 @@
         <template #left>
           <div class="grid grid-cols-6 gap-2">
             <USelect v-model="date" :items="months" :loading="pending" />
+
+            <!-- Тип должника -->
+            <USelect
+              size="md"
+              :items="subjectTypesValues"
+              :model-value="
+                table?.tableApi
+                  ?.getColumn('fssp:DebtorType')
+                  ?.getFilterValue() as string
+              "
+              placeholder="Тип должника"
+              @update:model-value="
+                table?.tableApi
+                  ?.getColumn('fssp:DebtorType')
+                  ?.setFilterValue($event)
+              "
+            />
+
+            <!-- Статус -->
+            <USelect
+              :items="statuses"
+              label-key="status"
+              value-key="status"
+              placeholder="Статус"
+              :model-value="
+                table?.tableApi?.getColumn('status')?.getFilterValue() as string
+              "
+              @update:model-value="
+                table?.tableApi?.getColumn('status')?.setFilterValue($event)
+              "
+            />
+
+            <!-- Исполнитель -->
+            <USelect
+              :items="executors"
+              label-key="executor"
+              value-key="executor"
+              placeholder="Исполнитель"
+              :model-value="
+                table?.tableApi
+                  ?.getColumn('executor')
+                  ?.getFilterValue() as string
+              "
+              @update:model-value="
+                table?.tableApi?.getColumn('executor')?.setFilterValue($event)
+              "
+            />
+
+            <!-- Наименование документа -->
+            <UInput
+              :model-value="
+                table?.tableApi
+                  ?.getColumn('fssp:DocName')
+                  ?.getFilterValue() as string
+              "
+              placeholder="Наименование документа"
+              @update:model-value="
+                table?.tableApi
+                  ?.getColumn('fssp:DocName')
+                  ?.setFilterValue($event)
+              "
+            />
+
+            <!-- Наименование должника -->
+            <UInput
+              :model-value="
+                table?.tableApi
+                  ?.getColumn('fssp:DbtrName')
+                  ?.getFilterValue() as string
+              "
+              placeholder="Наименование должника"
+              @update:model-value="
+                table?.tableApi
+                  ?.getColumn('fssp:DbtrName')
+                  ?.setFilterValue($event)
+              "
+            />
+
+            <!-- Номер исп. производства -->
+            <UInput
+              :model-value="
+                table?.tableApi
+                  ?.getColumn('fssp:IpNo')
+                  ?.getFilterValue() as string
+              "
+              placeholder="Номер исп. производства"
+              @update:model-value="
+                table?.tableApi?.getColumn('fssp:IpNo')?.setFilterValue($event)
+              "
+            />
+
+            <!-- Дата документа -->
+            <UInput
+              :model-value="
+                table?.tableApi
+                  ?.getColumn('fssp:DocDate')
+                  ?.getFilterValue() as string
+              "
+              placeholder="Дата документа"
+              @update:model-value="
+                table?.tableApi
+                  ?.getColumn('fssp:DocDate')
+                  ?.setFilterValue($event)
+              "
+            />
+
+            <!-- Номер исп. листа -->
+            <UInput
+              :model-value="
+                table?.tableApi
+                  ?.getColumn('fssp:IdDocNo')
+                  ?.getFilterValue() as string
+              "
+              placeholder="Номер исп. листа"
+              @update:model-value="
+                table?.tableApi
+                  ?.getColumn('fssp:IdDocNo')
+                  ?.setFilterValue($event)
+              "
+            />
+
+            <!-- Номер дела -->
+            <UInput
+              :model-value="
+                table?.tableApi
+                  ?.getColumn('fssp:IdDeloNo')
+                  ?.getFilterValue() as string
+              "
+              placeholder="Номер дела"
+              @update:model-value="
+                table?.tableApi
+                  ?.getColumn('fssp:IdDeloNo')
+                  ?.setFilterValue($event)
+              "
+            />
+
+            <!-- ФИО пристава -->
+            <UInput
+              :model-value="
+                table?.tableApi
+                  ?.getColumn('fssp:Spi')
+                  ?.getFilterValue() as string
+              "
+              placeholder="ФИО пристава"
+              @update:model-value="
+                table?.tableApi?.getColumn('fssp:Spi')?.setFilterValue($event)
+              "
+            />
           </div>
         </template>
       </UDashboardToolbar>
@@ -21,6 +169,7 @@
           th: 'text-xs py-1 px-1.5',
           td: 'whitespace-normal py-1 px-1.5 text-xs',
         }"
+        ref="table"
         loading-color="secondary"
         empty="Нет данных"
       />
@@ -35,8 +184,20 @@ useHead({
   title: 'Уведомления',
 });
 
+const table = useTemplateRef('table');
 const months = useGetMonths();
 const date = ref(months[0]?.value);
+
+// Фильтры
+const subjectTypesValues = ref([
+  {
+    label: 'Любой',
+    value: null,
+  },
+  'ЮЛ',
+  'ФЛ',
+  'ИП',
+]);
 
 const { data: messages, pending } = await useFetch<Message[]>('/api/messages', {
   lazy: true,
@@ -123,4 +284,8 @@ const columns: TableColumn<Message>[] = [
   //   header: 'Взыскатель',
   // },
 ];
+
+const { data: statuses } = await useFetch('/api/statuses');
+
+const { data: executors } = await useFetch('/api/executors');
 </script>
