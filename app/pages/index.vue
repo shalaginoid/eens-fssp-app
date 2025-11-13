@@ -179,6 +179,7 @@
 </template>
 
 <script setup lang="ts">
+import moment from 'moment';
 import type { TableColumn } from '@nuxt/ui';
 
 useHead({
@@ -200,26 +201,38 @@ const subjectTypesValues = ref([
   'ИП',
 ]);
 
-const { data: messages, pending } = await useFetch<Message[]>('/api/messages', {
-  lazy: true,
-  query: {
-    date,
-  },
-});
+const UButton = resolveComponent('UButton');
+const UTooltip = resolveComponent('UTooltip');
 
 const columns: TableColumn<Message>[] = [
   {
     accessorKey: 'status',
     header: 'Статус',
+    meta: {
+      class: {
+        td: 'text-center',
+      },
+    },
+    cell: ({ row }) => {
+      const status = row.getValue('status');
+
+      return h('div', {
+        class: `w-1.5 h-1.5 rounded-full m-auto ${status === 'Завершено' ? 'bg-success' : status === 'В работе' ? 'bg-secondary' : 'bg-neutral-400'}`,
+      });
+
+      // return h(UButton, {
+      //   color:
+      //     status === 'Завершено'
+      //       ? 'success'
+      //       : status === 'В работе'
+      //         ? 'secondary'
+      //         : 'neutral',
+      //   variant: 'link',
+      //   size: 'xs',
+      //   icon: 'i-lucide-info',
+      // });
+    },
   },
-  // {
-  //   accessorKey: 'notifyId',
-  //   header: 'ID уведомления',
-  // },
-  // {
-  //   accessorKey: 'messageId',
-  //   header: 'ID сообщения',
-  // },
   {
     accessorKey: 'executor',
     header: 'Исполнитель',
@@ -227,6 +240,12 @@ const columns: TableColumn<Message>[] = [
   {
     accessorKey: 'notifyDate',
     header: 'Дата уведомления',
+    cell: ({ row }) => {
+      const date = moment(row.getValue('notifyDate')).format(
+        'DD.MM.YYYY HH:mm',
+      );
+      return date;
+    },
   },
   {
     accessorKey: 'fssp:DebtorType',
@@ -281,12 +300,25 @@ const columns: TableColumn<Message>[] = [
     header: 'ФИО пристава',
   },
   // {
+  //   accessorKey: 'notifyId',
+  //   header: 'ID уведомления',
+  // },
+  // {
+  //   accessorKey: 'messageId',
+  //   header: 'ID сообщения',
+  // },
+  // {
   //   accessorKey: 'fssp:IdCrdrName',
   //   header: 'Взыскатель',
   // },
 ];
 
 const { data: statuses } = await useFetch('/api/statuses');
-
 const { data: executors } = await useFetch('/api/executors');
+const { data: messages, pending } = await useFetch<Message[]>('/api/messages', {
+  lazy: true,
+  query: {
+    date,
+  },
+});
 </script>
