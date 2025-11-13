@@ -12,9 +12,8 @@
       <CustomLink
         to="http://portal.eksbyt.ru/openv/Lists/openview/NewLNA4.aspx"
         target="_blank"
+        >подать заявку</CustomLink
       >
-        подать заявку
-      </CustomLink>
       в отдел сетевой инфраструктуры для включения в доменную группу «{{
         appName
       }}»

@@ -1,44 +1,89 @@
 <template>
-  <div class="flex h-screen flex-col justify-between">
-    <header class="flex-none bg-white">
-      <UContainer class="flex items-center gap-4 py-2">
+  <UDashboardGroup unit="rem">
+    <UDashboardSidebar
+      id="default"
+      v-model:open="open"
+      collapsible
+      class="bg-elevated/25"
+      :ui="{ footer: 'lg:border-t lg:border-default' }"
+    >
+      <template #header="{ collapsed }">
+        <NuxtLink to="/">
+          <img src="/images/eens.svg" width="36" height="36" />
+        </NuxtLink>
+
+        <div v-if="!collapsed" class="ms-auto flex items-center gap-1.5">
+          <UDashboardSidebarCollapse size="md" class="text-neutral-300" />
+        </div>
+      </template>
+
+      <template #default="{ collapsed }">
+        <div v-if="collapsed">
+          <UDashboardSidebarCollapse size="md" class="text-neutral-300" />
+        </div>
+
+        <div v-if="!collapsed" class="text-muted rounded px-3 py-1.5 text-sm">
+          Госпочта ФССП
+        </div>
+
         <UNavigationMenu
-          :ui="{
-            content: 'sm:w-auto',
-            childList: 'sm:w-48',
-          }"
-          :items="mainMenu"
-          :disableClickTrigger="true"
-          class="w-full"
-          variant="pill"
+          :collapsed="collapsed"
+          :items="links[0]"
+          orientation="vertical"
           color="secondary"
-          content-orientation="vertical"
-          highlightColor="error"
-        ></UNavigationMenu>
+          tooltip
+        />
 
-        <UserMenu collapsed class="max-w-8" size="md" />
-      </UContainer>
-    </header>
+        <UNavigationMenu
+          :collapsed="collapsed"
+          :items="links[1]"
+          orientation="vertical"
+          color="secondary"
+          class="mt-auto"
+          tooltip
+        />
+      </template>
 
-    <main class="flex-1">
-      <slot></slot>
-    </main>
-  </div>
+      <template #footer="{ collapsed }">
+        <UserMenu :collapsed="collapsed" />
+      </template>
+    </UDashboardSidebar>
+
+    <slot></slot>
+  </UDashboardGroup>
 </template>
 
 <script setup lang="ts">
-const mainMenu = computed(() => [
-  {
-    label: 'Уведомления',
-    to: '/',
-  },
-  {
-    label: 'Исполнители',
-    to: '/executors',
-  },
-  {
-    label: 'Статистика',
-    to: '/statistic',
-  },
-]);
+import type { NavigationMenuItem } from '@nuxt/ui';
+
+const open = ref(false);
+
+const links = computed(() => {
+  return [
+    [
+      {
+        label: 'Уведомления',
+        icon: 'i-lucide-bell-ring',
+        to: '/',
+      },
+      {
+        label: 'Исполнители',
+        icon: 'i-lucide-users',
+        to: '/executors',
+      },
+      {
+        label: 'Статистика',
+        icon: 'i-lucide-chart-area',
+        to: '/statistic',
+      },
+    ],
+    [
+      {
+        label: 'О сервисе',
+        icon: 'i-lucide-info',
+        to: '/about',
+      },
+    ],
+  ] satisfies NavigationMenuItem[][];
+});
 </script>

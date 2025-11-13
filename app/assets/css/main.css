@@ -30,10 +30,6 @@
   @apply text-muted p-3 text-sm whitespace-nowrap;
 }
 
-body {
-  background-color: var(--ui-bg-elevated);
-}
-
 button:active:enabled,
 button:hover:enabled,
 select,

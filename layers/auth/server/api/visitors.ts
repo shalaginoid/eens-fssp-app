@@ -22,13 +22,16 @@ export default defineWebSocketHandler({
 async function useGetUsers(peers: any) {
   const users = await Promise.all(
     peers.map(async (peer: any) => {
-      const session = await getUserSession(peer);
+      // const session = await getUserSession(peer);
+      const session = await requireUserSession(peer);
 
-      return {
-        sessionId: session.id,
-        peerId: peer.id,
-        user: session.user,
-      };
+      if (session) {
+        return {
+          sessionId: session.id,
+          peerId: peer.id,
+          user: session.user,
+        };
+      }
     }),
   );
 
