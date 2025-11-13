@@ -3,9 +3,18 @@ import sql from 'mssql';
 export default defineEventHandler(async (event) => {
   process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1';
 
+  // const date = getRouterParam(event, 'date');
+
+  const { date } = getQuery(event);
+
+  if (!date) {
+    throw createError({
+      statusCode: 400,
+    });
+  }
+
   const runtimeConfig = useRuntimeConfig();
   const connString = runtimeConfig.dbConnectionString;
-  const date = getRouterParam(event, 'date');
 
   await sql.connect(connString);
 
