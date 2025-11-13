@@ -172,6 +172,7 @@
         ref="table"
         loading-color="secondary"
         empty="Нет данных"
+        sticky
       />
     </template>
   </UDashboardPanel>
