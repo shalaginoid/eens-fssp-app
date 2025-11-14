@@ -1,21 +1,27 @@
 <template>
-  <UContainer class="my-8">
-    <UCard>
-      <h1 class="mb-4 text-2xl font-bold">Статистика</h1>
+  <UDashboardPanel id="statistic">
+    <template #header>
+      <UDashboardNavbar title="Статистика" />
+    </template>
 
-      <p v-if="loading">Загрузка...</p>
+    <template #body>
+      <UContainer>
+        <UPageCard>
+          <p v-if="loading">Загрузка...</p>
 
-      <UAlert
-        v-if="errorMessage"
-        :description="errorMessage"
-        class="mb-4"
-        color="error"
-        variant="soft"
-      ></UAlert>
+          <UAlert
+            v-if="errorMessage"
+            :description="errorMessage"
+            class="mb-4"
+            color="error"
+            variant="soft"
+          ></UAlert>
 
-      <GosuslugiBar :data="data" />
-    </UCard>
-  </UContainer>
+          <GosuslugiBar :data="data" />
+        </UPageCard>
+      </UContainer>
+    </template>
+  </UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
@@ -30,18 +36,6 @@ const data = ref();
 onMounted(async () => {
   await getStatistic();
 });
-
-type Statistic = {
-  accepted: StatisticItem[];
-  inProgress: StatisticItem[];
-  completed: StatisticItem[];
-};
-
-type StatisticItem = {
-  month: string;
-  status: string;
-  quantity: string;
-};
 
 const loading = ref(false);
 const errorMessage = ref(null);

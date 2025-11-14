@@ -31,3 +31,15 @@ type Executor = {
   id: number;
   executor: string;
 };
+
+type Statistic = {
+  accepted: StatisticItem[];
+  inProgress: StatisticItem[];
+  completed: StatisticItem[];
+};
+
+type StatisticItem = {
+  month: string;
+  status: string;
+  quantity: string;
+};
