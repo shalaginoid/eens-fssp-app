@@ -5,7 +5,9 @@
     </template>
 
     <template #body>
-      <UContainer>
+      <div
+        class="mx-auto flex w-full flex-col gap-4 sm:gap-6 lg:max-w-3xl lg:gap-12"
+      >
         <UPageCard>
           <UTable :data="executors" :columns="columns" empty="Нет данных" />
 
@@ -13,7 +15,7 @@
             <UButton label="Добавить" @click="openAddExecutorModal" />
           </div>
         </UPageCard>
-      </UContainer>
+      </div>
     </template>
   </UDashboardPanel>
 </template>
