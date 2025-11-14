@@ -1,14 +1,17 @@
-import sql from 'mssql';
+import { getConnection } from '~~/server/utils/useDatabase';
 
 export default defineEventHandler(async (event) => {
-  const runtimeConfig = useRuntimeConfig();
-  const connString = runtimeConfig.dbConnectionString;
+  const pool = await getConnection();
+
   const messageId = getRouterParam(event, 'messageId');
 
-  await sql.connect(connString);
+  const result = await pool.query(
+    `SELECT * FROM dbo.Files WHERE messageId = ${messageId}`,
+  );
 
-  const result = await sql.query(`SELECT * FROM dbo.Files WHERE messageId = ${messageId}`);
   const files = result.recordset;
+
+  await pool.close();
 
   return files;
 });

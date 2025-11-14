@@ -1,8 +1,6 @@
-import sql from 'mssql';
+import { getConnection } from '~~/server/utils/useDatabase';
 
 export default defineEventHandler(async (event) => {
-  const runtimeConfig = useRuntimeConfig();
-  const connString = runtimeConfig.dbConnectionString;
   const { executor } = await readBody(event);
 
   if (!executor) {
@@ -11,11 +9,13 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  await sql.connect(connString);
+  const pool = await getConnection();
 
-  const result = await sql.query(
-    `INSERT INTO dbo.Executors (Executor) VALUES ('${executor}') SELECT SCOPE_IDENTITY() as id`
+  const result = await pool.query(
+    `INSERT INTO dbo.Executors (Executor) VALUES ('${executor}') SELECT SCOPE_IDENTITY() as id`,
   );
+
+  await pool.close();
 
   setResponseStatus(event, 201, JSON.stringify({ id: result.recordset[0].id }));
 });

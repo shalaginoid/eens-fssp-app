@@ -1,8 +1,6 @@
-import sql from 'mssql';
+import { getConnection } from '~~/server/utils/useDatabase';
 
 export default defineEventHandler(async (event) => {
-  const runtimeConfig = useRuntimeConfig();
-  const connString = runtimeConfig.dbConnectionString;
   const { messageId, statusId, executorId } = await readBody(event);
 
   if (!messageId || !statusId || !executorId) {
@@ -11,7 +9,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  await sql.connect(connString);
+  const pool = await getConnection();
 
   const query = `
     BEGIN TRANSACTION;
@@ -23,7 +21,9 @@ export default defineEventHandler(async (event) => {
     COMMIT TRANSACTION;
   `;
 
-  await sql.query(query);
+  await pool.query(query);
+
+  await pool.close();
 
   setResponseStatus(event, 200);
 });

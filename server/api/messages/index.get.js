@@ -1,4 +1,4 @@
-import sql from 'mssql';
+import { getConnection } from '~~/server/utils/useDatabase';
 
 export default defineEventHandler(async (event) => {
   process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1';
@@ -13,10 +13,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const runtimeConfig = useRuntimeConfig();
-  const connString = runtimeConfig.dbConnectionString;
-
-  await sql.connect(connString);
+  const pool = await getConnection();
 
   const query = `
     SELECT
@@ -39,7 +36,7 @@ export default defineEventHandler(async (event) => {
     ORDER BY M.notifyDate DESC
   `;
 
-  const result = await sql.query(query);
+  const result = await pool.query(query);
 
   // Трансформируем массив, чтобы отсеять лишние данные
   const map = result.recordset.map((item) => {
@@ -80,6 +77,8 @@ export default defineEventHandler(async (event) => {
       };
     }
   });
+
+  await pool.close();
 
   return map;
 });

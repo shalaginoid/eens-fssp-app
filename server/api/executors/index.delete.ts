@@ -1,8 +1,6 @@
-import sql from 'mssql';
+import { getConnection } from '~~/server/utils/useDatabase';
 
 export default defineEventHandler(async (event) => {
-  const runtimeConfig = useRuntimeConfig();
-  const connString = runtimeConfig.dbConnectionString;
   const { id } = await readBody(event);
 
   if (!id) {
@@ -11,8 +9,10 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  await sql.connect(connString);
-  await sql.query(`DELETE FROM dbo.Executors WHERE id = ${id}`);
+  const pool = await getConnection();
+
+  await pool.query(`DELETE FROM dbo.Executors WHERE id = ${id}`);
+  await pool.close();
 
   setResponseStatus(event, 200);
 });

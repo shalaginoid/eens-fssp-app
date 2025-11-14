@@ -1,7 +1,9 @@
-import db from './db';
+import config from './config';
 import pkg from './package.json';
 
 export default defineNuxtConfig({
+  compatibilityDate: '2025-10-02',
+  devtools: { enabled: false },
   app: {
     baseURL: `/${pkg.name}/`,
     head: {
@@ -28,7 +30,7 @@ export default defineNuxtConfig({
   },
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
-    dbConnectionString: db.connectString,
+    mssql: config.mssql,
     public: {
       appName: pkg.description,
     },
@@ -38,6 +40,4 @@ export default defineNuxtConfig({
       dir: pkg.name,
     },
   },
-  compatibilityDate: '2025-10-02',
-  devtools: { enabled: false },
 });

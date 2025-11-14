@@ -1,12 +1,9 @@
-import sql from 'mssql';
+import { getConnection } from '~~/server/utils/useDatabase';
 
 export default defineEventHandler(async (event) => {
-  const runtimeConfig = useRuntimeConfig();
-  const connString = runtimeConfig.dbConnectionString;
-
-  await sql.connect(connString);
-
-  const result = await sql.query('SELECT * FROM dbo.Executors');
+  const pool = await getConnection();
+  const result = await pool.query('SELECT * FROM dbo.Executors');
+  await pool.close();
 
   return result.recordset;
 });

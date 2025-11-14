@@ -1,8 +1,6 @@
-import sql from 'mssql';
+import { getConnection } from '~~/server/utils/useDatabase';
 
 export default defineEventHandler(async (event) => {
-  const runtimeConfig = useRuntimeConfig();
-  const connString = runtimeConfig.dbConnectionString;
   const { id, executor } = await readBody(event);
 
   if (!id && !executor) {
@@ -11,8 +9,13 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  await sql.connect(connString);
-  await sql.query(`UPDATE dbo.Executors SET executor = '${executor}' WHERE id = ${id}`);
+  const pool = await getConnection();
+
+  await pool.query(
+    `UPDATE dbo.Executors SET executor = '${executor}' WHERE id = ${id}`,
+  );
+
+  await pool.close();
 
   setResponseStatus(event, 204);
 });

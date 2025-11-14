@@ -1,10 +1,7 @@
-import sql from 'mssql';
+import { getConnection } from '~~/server/utils/useDatabase';
 
 export default defineEventHandler(async (event) => {
-  const runtimeConfig = useRuntimeConfig();
-  const connString = runtimeConfig.dbConnectionString;
-
-  await sql.connect(connString);
+  const pool = await getConnection();
 
   const inProgress = `
       WITH STATUSES AS (
@@ -60,13 +57,15 @@ export default defineEventHandler(async (event) => {
       GROUP BY S.month, S.status
     `;
 
-  const inProgressResult = await sql.query(inProgress);
-  const completedResult = await sql.query(completed);
-  const acceptedResult = await sql.query(accepted);
+  const inProgressResult = await pool.query(inProgress);
+  const completedResult = await pool.query(completed);
+  const acceptedResult = await pool.query(accepted);
 
   const inProgressRecordset = inProgressResult.recordset;
   const completedRecordset = completedResult.recordset;
   const acceptedRecordset = acceptedResult.recordset;
+
+  await pool.close();
 
   return {
     accepted: acceptedRecordset,
