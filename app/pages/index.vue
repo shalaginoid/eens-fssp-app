@@ -9,9 +9,9 @@
             <USelect v-model="date" :items="months" :loading="pending" />
 
             <!-- Тип должника -->
-            <USelect
-              size="md"
+            <USelectMenu
               :items="subjectTypesValues"
+              :searchInput="false"
               :model-value="
                 table?.tableApi
                   ?.getColumn('fssp:DebtorType')
@@ -23,11 +23,30 @@
                   ?.getColumn('fssp:DebtorType')
                   ?.setFilterValue($event)
               "
-            />
+            >
+              <template #empty>Нет данных</template>
+              <template #trailing>
+                <UIcon
+                  v-if="
+                    table?.tableApi
+                      ?.getColumn('fssp:DebtorType')
+                      ?.getFilterValue()
+                  "
+                  name="i-lucide-x"
+                  class="text-muted size-4 cursor-pointer"
+                  @click.stop="
+                    table?.tableApi
+                      ?.getColumn('fssp:DebtorType')
+                      ?.setFilterValue(undefined)
+                  "
+                />
+              </template>
+            </USelectMenu>
 
             <!-- Статус -->
-            <USelect
+            <USelectMenu
               :items="statuses"
+              :searchInput="false"
               label-key="status"
               value-key="status"
               placeholder="Статус"
@@ -37,11 +56,26 @@
               @update:model-value="
                 table?.tableApi?.getColumn('status')?.setFilterValue($event)
               "
-            />
+            >
+              <template #empty>Нет данных</template>
+              <template #trailing>
+                <UIcon
+                  v-if="table?.tableApi?.getColumn('status')?.getFilterValue()"
+                  name="i-lucide-x"
+                  class="text-muted size-4 cursor-pointer"
+                  @click.stop="
+                    table?.tableApi
+                      ?.getColumn('status')
+                      ?.setFilterValue(undefined)
+                  "
+                />
+              </template>
+            </USelectMenu>
 
             <!-- Исполнитель -->
-            <USelect
+            <USelectMenu
               :items="executors"
+              :searchInput="{ placeholder: 'Поиск...', variant: 'none' }"
               label-key="executor"
               value-key="executor"
               placeholder="Исполнитель"
@@ -53,7 +87,23 @@
               @update:model-value="
                 table?.tableApi?.getColumn('executor')?.setFilterValue($event)
               "
-            />
+            >
+              <template #empty>Нет данных</template>
+              <template #trailing>
+                <UIcon
+                  v-if="
+                    table?.tableApi?.getColumn('executor')?.getFilterValue()
+                  "
+                  name="i-lucide-x"
+                  class="text-muted size-4 cursor-pointer"
+                  @click.stop="
+                    table?.tableApi
+                      ?.getColumn('executor')
+                      ?.setFilterValue(undefined)
+                  "
+                />
+              </template>
+            </USelectMenu>
 
             <!-- Наименование документа -->
             <UInput
@@ -194,16 +244,7 @@ const months = useGetMonths();
 const date = ref(months[4]?.value);
 const messages = ref();
 
-// Фильтры
-const subjectTypesValues = ref([
-  {
-    label: 'Любой',
-    value: null,
-  },
-  'ЮЛ',
-  'ФЛ',
-  'ИП',
-]);
+const subjectTypesValues = ref(['ЮЛ', 'ФЛ', 'ИП']);
 
 const UButton = resolveComponent('UButton');
 const UTooltip = resolveComponent('UTooltip');
