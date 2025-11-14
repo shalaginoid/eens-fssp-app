@@ -14,20 +14,8 @@
   @apply text-secondary border-secondary/30 hover:text-secondary/70 hover:border-secondary/15 border-b transition-colors;
 }
 
-.link.modal {
-  @apply border-dashed;
-}
-
-.table {
-  @apply min-w-full border-gray-200 bg-white;
-}
-
-.table tr {
-  @apply border-gray-200 not-last:border-b;
-}
-
-.table td {
-  @apply text-muted p-3 text-sm whitespace-nowrap;
+.custom-link span {
+  @apply text-secondary border-secondary/30 group-hover:text-secondary/70 group-hover:border-b-secondary/15 border-b transition-colors;
 }
 
 button:active:enabled,
@@ -36,38 +24,4 @@ select,
 option,
 label {
   cursor: pointer !important;
-}
-
-.editor {
-  @apply placeholder:text-dimmed text-highlighted bg-default ring-accented focus-visible:ring-primary w-full gap-2 rounded-md border-0 px-3 py-2 text-sm ring transition-colors ring-inset focus:outline-none focus-visible:ring-2 focus-visible:ring-inset disabled:cursor-not-allowed disabled:opacity-75;
-}
-
-.preview {
-  border-radius: 16px;
-}
-
-.preview p {
-  font-size: 0.875rem;
-}
-
-.preview p:not(:last-child) {
-  margin-bottom: 0.5rem;
-}
-
-.preview ul,
-.preview ol {
-  list-style-type: disc;
-  padding: 0 1rem;
-  margin: 0 0.25rem 0.5rem 0.25rem;
-}
-
-.preview img,
-.preview svg,
-.preview video,
-.preview canvas,
-.preview audio,
-.preview iframe,
-.preview embed,
-.preview object {
-  display: inline;
 }
