@@ -23,7 +23,7 @@
 
         <UFormField
           label="Фамилия и инициалы"
-          description="Например, Иванов И.И."
+          description="Например, Иванов И. И."
           name="fullname"
         >
           <UInput v-model="state.fullname" />

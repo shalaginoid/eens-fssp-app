@@ -191,7 +191,8 @@ const toast = useToast();
 const overlay = useOverlay();
 const table = useTemplateRef('table');
 const months = useGetMonths();
-const date = ref(months[0]?.value);
+const date = ref(months[4]?.value);
+const messages = ref();
 
 // Фильтры
 const subjectTypesValues = ref([
@@ -336,41 +337,57 @@ const columns: TableColumn<Message>[] = [
 
 const { data: statuses } = await useFetch<Status[]>('/api/statuses');
 const { data: executors } = await useFetch<Executor[]>('/api/executors');
-const { data: messages, pending } = await useFetch<Message[]>('/api/messages', {
+const { data: messData, pending } = await useFetch<Message[]>('/api/messages', {
   lazy: true,
   query: {
     date,
   },
 });
 
+if (messData.value) {
+  messages.value = messData.value;
+}
+
+watch(messData, (messData) => {
+  messages.value = messData;
+});
+
 // Назначение статуса и исполнителя
 const setStatusModal = overlay.create(SetStatusModal);
 
 async function openSetStatusModal(message: Message) {
-  const result: any = await setStatusModal.open({
-    message: message,
-    statuses: statuses.value,
-    executors: executors.value,
-  });
+  if (messages.value && statuses.value && executors.value) {
+    const result: any = await setStatusModal.open({
+      message: message,
+      statuses: statuses.value,
+      executors: executors.value,
+    });
 
-  // if (result) {
-  //   const findMessage = messages.value.find(
-  //     (item: Message) => item.messageId === result.messageId,
-  //   );
-  //   const executor = toRaw(executors.value).find(
-  //     (item: any) => item.value == result.executorId,
-  //   );
-  //   const status = toRaw(statuses.value).find(
-  //     (item: any) => item.value === result.statusId,
-  //   );
-  //   findMessage.executorId = result.executorId;
-  //   findMessage.statusId = result.statusId;
-  //   findMessage.executor = executor.label;
-  //   findMessage.status = status.label;
-  //   toast.add({
-  //     description: 'Статус и исполнитель успешно установлены',
-  //     color: 'success',
-  //   });
-  // }
+    if (result) {
+      const findMessage = messages.value.find(
+        (item: Message) => item.messageId === result.messageId,
+      );
+
+      const executor = executors.value.find(
+        (item: Executor) => item.id === result.executorId,
+      );
+
+      const status = toRaw(statuses.value).find(
+        (item: Status) => item.id === result.statusId,
+      );
+
+      if (findMessage && executor && status) {
+        findMessage.executorId = result.executorId;
+        findMessage.statusId = result.statusId;
+        findMessage.executor = executor.executor;
+        findMessage.status = status.status;
+
+        toast.add({
+          description: 'Статус и исполнитель успешно установлены',
+          color: 'success',
+        });
+      }
+    }
+  }
 }
 </script>

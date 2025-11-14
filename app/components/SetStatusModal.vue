@@ -5,9 +5,9 @@
     <template #description>Назначение исполнителя и установка статуса</template>
 
     <template #body>
-      <pre>{{ props }}</pre>
+      <!-- <pre>{{ props }}</pre> -->
 
-      <!-- <UForm
+      <UForm
         :schema="setStatusSchema"
         :state="state"
         class="space-y-4"
@@ -25,6 +25,8 @@
           <USelect
             v-model="state.executorId"
             :items="props.executors"
+            label-key="executor"
+            value-key="id"
             placeholder="Исполнитель"
             class="min-w-48"
           />
@@ -34,13 +36,15 @@
           <USelect
             v-model="state.statusId"
             :items="props.statuses"
+            label-key="status"
+            value-key="id"
             placeholder="Статус"
             class="min-w-36"
           />
         </UFormField>
 
         <UButton type="submit">Добавить</UButton>
-      </UForm> -->
+      </UForm>
     </template>
   </UModal>
 </template>
@@ -50,40 +54,40 @@ import type { FormSubmitEvent } from '@nuxt/ui';
 
 const props = defineProps<{
   message: Message;
-  statuses: Array<Status>;
-  executors: Array<Executor>;
+  statuses: Status[];
+  executors: Executor[];
 }>();
 
-// const emit = defineEmits<{ close: any }>();
+const emit = defineEmits<{ close: any }>();
 
-// const state = reactive<Partial<SetStatusSchema>>({
-//   executorId: Number(toRaw(props.message).executorId) || undefined,
-//   statusId: Number(toRaw(props.message).statusId) || undefined,
-// });
+const state = reactive<Partial<SetStatusSchema>>({
+  executorId: Number(toRaw(props.message).executorId) || undefined,
+  statusId: Number(toRaw(props.message).statusId) || undefined,
+});
 
-// const errorMessage = ref(null);
+const errorMessage = ref(null);
 
-// async function setStatus(event: FormSubmitEvent<SetStatusSchema>) {
-//   errorMessage.value = null;
-//   const data = toRaw(event.data);
+async function setStatus(event: FormSubmitEvent<SetStatusSchema>) {
+  errorMessage.value = null;
+  const data = toRaw(event.data);
 
-//   const body = {
-//     messageId: toRaw(props.message).messageId,
-//     statusId: data.statusId,
-//     executorId: data.executorId,
-//   };
+  const body = {
+    messageId: toRaw(props.message).messageId,
+    statusId: data.statusId,
+    executorId: data.executorId,
+  };
 
-//   try {
-//     const response = await $fetch.raw('/api/relations', {
-//       method: 'POST',
-//       body,
-//     });
+  try {
+    const response = await $fetch.raw('/api/relations', {
+      method: 'POST',
+      body,
+    });
 
-//     if (response.status === 204) {
-//       emit('close', body);
-//     }
-//   } catch (error: any) {
-//     errorMessage.value = error.message;
-//   }
-// }
+    if (response.status === 204) {
+      emit('close', body);
+    }
+  } catch (error: any) {
+    errorMessage.value = error.message;
+  }
+}
 </script>

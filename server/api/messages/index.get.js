@@ -19,25 +19,25 @@ export default defineEventHandler(async (event) => {
   await sql.connect(connString);
 
   const query = `
-      SELECT
-        M.messageId,
-        M.data,
-        M.notifyId,
-        M.notifyDate,
-        R.executorId,
-        E.executor,
-        R.statusId,
-        S.status
-      FROM Messages M
-        LEFT JOIN Relations R ON R.messageId = M.messageId
-        LEFT JOIN Statuses S ON S.id = R.statusId
-        LEFT JOIN Executors E ON E.id = R.executorId
-      WHERE 1 = 1
-        AND CONVERT(varchar(7), DATEADD(HOUR, 2, CAST(LEFT(M.notifyDate, 19) AS DATETIME)), 20) = '${date}'
-        AND M.data LIKE '%fssp:DocName%'
-        AND M.data LIKE '%fssp:DebtorType%'
-      ORDER BY M.notifyDate DESC
-    `;
+    SELECT TOP 10
+      M.messageId,
+      M.data,
+      M.notifyId,
+      M.notifyDate,
+      R.executorId,
+      E.executor,
+      R.statusId,
+      S.status
+    FROM Messages M
+      LEFT JOIN Relations R ON R.messageId = M.messageId
+      LEFT JOIN Statuses S ON S.id = R.statusId
+      LEFT JOIN Executors E ON E.id = R.executorId
+    WHERE 1 = 1
+      AND CONVERT(varchar(7), DATEADD(HOUR, 2, CAST(LEFT(M.notifyDate, 19) AS DATETIME)), 20) = '${date}'
+      AND M.data LIKE '%fssp:DocName%'
+      AND M.data LIKE '%fssp:DebtorType%'
+    ORDER BY M.notifyDate DESC
+  `;
 
   const result = await sql.query(query);
 
