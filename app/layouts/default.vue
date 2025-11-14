@@ -58,32 +58,30 @@ import type { NavigationMenuItem } from '@nuxt/ui';
 
 const open = ref(false);
 
-const links = computed(() => {
-  return [
-    [
-      {
-        label: 'Уведомления',
-        icon: 'i-lucide-bell-ring',
-        to: '/',
-      },
-      {
-        label: 'Исполнители',
-        icon: 'i-lucide-users',
-        to: '/executors',
-      },
-      {
-        label: 'Статистика',
-        icon: 'i-lucide-chart-area',
-        to: '/statistic',
-      },
-    ],
-    [
-      {
-        label: 'О сервисе',
-        icon: 'i-lucide-info',
-        to: '/about',
-      },
-    ],
-  ] satisfies NavigationMenuItem[][];
-});
+const links = [
+  [
+    {
+      label: 'Уведомления',
+      icon: 'i-lucide-bell-ring',
+      to: '/',
+    },
+    {
+      label: 'Исполнители',
+      icon: 'i-lucide-users-round',
+      to: '/executors',
+    },
+    {
+      label: 'Статистика',
+      icon: 'i-lucide-chart-area',
+      to: '/statistic',
+    },
+  ],
+  [
+    {
+      label: 'О сервисе',
+      icon: 'i-lucide-info',
+      to: '/about',
+    },
+  ],
+] satisfies NavigationMenuItem[][];
 </script>
