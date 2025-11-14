@@ -22,8 +22,8 @@ export default defineWebSocketHandler({
 async function useGetUsers(peers: any) {
   const users = await Promise.all(
     peers.map(async (peer: any) => {
-      // const session = await getUserSession(peer);
-      const session = await requireUserSession(peer);
+      const session = await getUserSession(peer);
+      // const session = await requireUserSession(peer);
 
       if (session) {
         return {

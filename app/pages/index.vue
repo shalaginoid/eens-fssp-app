@@ -205,6 +205,8 @@
                 table?.tableApi?.getColumn('fssp:Spi')?.setFilterValue($event)
               "
             />
+
+            <Excel v-if="messages" :data="messages" />
           </div>
         </template>
       </UDashboardToolbar>
@@ -219,11 +221,28 @@
           th: 'text-xs py-1 px-1.5',
           td: 'whitespace-normal py-1 px-1.5 text-xs',
         }"
+        :pagination-options="{
+          getPaginationRowModel: getPaginationRowModel(),
+        }"
+        v-model:pagination="pagination"
         ref="table"
         loading-color="secondary"
         empty="Нет данных"
         sticky
       />
+
+      <div v-if="messages">
+        <UPagination
+          :key="key"
+          :default-page="
+            (table?.tableApi?.getState().pagination.pageIndex || 0) + 1
+          "
+          :items-per-page="table?.tableApi?.getState().pagination.pageSize"
+          :total="table?.tableApi?.getFilteredRowModel().rows.length"
+          @update:page="(p) => table?.tableApi?.setPageIndex(p - 1)"
+          show-edges
+        />
+      </div>
     </template>
   </UDashboardPanel>
 </template>
@@ -232,6 +251,7 @@
 import moment from 'moment';
 import type { TableColumn } from '@nuxt/ui';
 import SetStatusModal from '@/components/SetStatusModal.vue';
+import { getPaginationRowModel } from '@tanstack/vue-table';
 
 useHead({
   title: 'Уведомления',
@@ -241,8 +261,12 @@ const toast = useToast();
 const overlay = useOverlay();
 const table = useTemplateRef('table');
 const months = useGetMonths();
-const date = ref(months[4]?.value);
+const date = ref(months[0]?.value);
 const messages = ref();
+const pagination = ref({
+  pageIndex: 0,
+  pageSize: 25,
+});
 
 const subjectTypesValues = ref(['ЮЛ', 'ФЛ', 'ИП']);
 
@@ -389,8 +413,15 @@ if (messData.value) {
   messages.value = messData.value;
 }
 
+const key = ref(0);
+
 watch(messData, (messData) => {
   messages.value = messData;
+
+  pagination.value.pageIndex = 0;
+  table?.value?.tableApi?.setPageIndex(0);
+
+  key.value++;
 });
 
 // Назначение статуса и исполнителя
