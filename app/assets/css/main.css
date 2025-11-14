@@ -18,8 +18,7 @@
   @apply text-secondary border-secondary/30 group-hover:text-secondary/70 group-hover:border-b-secondary/15 border-b transition-colors;
 }
 
-button:active:enabled,
-button:hover:enabled,
+button:not(:disabled),
 select,
 option,
 label {

@@ -102,7 +102,7 @@ function getRowItems(row: Row<Executor>) {
       label: 'Удалить',
       icon: 'i-lucide-trash',
       color: 'error',
-      disabled: user?.value?.department !== 'УСПО_ОИСиИС',
+      disabled: user?.value?.department === 'УСПО_ОИСиИС',
       onSelect() {
         openDeleteExecutorModal(row.original);
       },
