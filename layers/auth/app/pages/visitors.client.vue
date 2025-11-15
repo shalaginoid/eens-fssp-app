@@ -20,17 +20,11 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { UserSession, User } from '#auth-utils';
 
-useSeoMeta({
-  title: 'Кто онлайн',
+useHead({
+  title: 'Сессии пользователей',
 });
 
 const { $visitors } = useNuxtApp();
-
-const filteredVisitors = computed(() => {
-  if ($visitors) {
-    return $visitors.value.filter((item) => item?.user?.mail != null);
-  }
-});
 
 const columns: TableColumn<UserSession>[] = [
   {

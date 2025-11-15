@@ -1,5 +1,5 @@
 <template>
-  <UDashboardPanel id="users">
+  <UDashboardPanel id="users" :ui="{ body: 'lg:py-12' }">
     <template #header>
       <UDashboardNavbar :ui="{ right: 'gap-3' }">
         <template #title>
@@ -9,11 +9,39 @@
     </template>
 
     <template #body>
-      <div
-        class="mx-auto flex w-full flex-col gap-4 sm:gap-6 lg:max-w-3xl lg:gap-12"
-      >
-        <UPageCard>
-          <UTable :data="online" :columns="columns" empty="Нет данных"></UTable>
+      <div class="mx-auto flex w-full flex-col lg:max-w-3xl">
+        <UPageCard
+          title="Пользователи"
+          :description="`Для предоставления доступа необходимо создать заявку в отдел сетевой инфраструктуры для включения в доменную группу «${appName}»`"
+          variant="naked"
+          orientation="horizontal"
+          class="mb-4"
+        >
+          <UButton
+            label="Создать заявку"
+            to="http://portal.eksbyt.ru/openv/Lists/openview/NewLNA4.aspx?RootFolder="
+            target="_blank"
+            class="w-fit lg:ms-auto"
+            trailing-icon="i-lucide-arrow-up-right"
+            color="secondary"
+            variant="soft"
+          />
+        </UPageCard>
+
+        <UPageCard
+          variant="subtle"
+          :ui="{
+            container: 'p-0 sm:p-0 gap-y-0',
+            wrapper: 'items-stretch',
+            header: 'p-4 mb-0 border-b border-default',
+          }"
+        >
+          <UTable
+            :data="online"
+            :columns="columns"
+            :ui="{ thead: 'hidden' }"
+            empty="Нет данных"
+          ></UTable>
         </UPageCard>
       </div>
     </template>
@@ -24,15 +52,15 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { User } from '#auth-utils';
 
-useSeoMeta({
+useHead({
   title: 'Пользователи сервиса',
 });
 
+const appName = useRuntimeConfig().public.appName;
+
 const UAvatar = resolveComponent('UAvatar');
 
-const { $visitors } = useNuxtApp();
-
-const { $users } = useNuxtApp();
+const { $visitors, $users } = useNuxtApp();
 
 const online = computed<any>(() => {
   if ($users) {

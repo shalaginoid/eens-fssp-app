@@ -1,17 +1,16 @@
 <template>
-  <NuxtLayout>
-    <UContainer class="my-8">
-      <UAlert color="error" variant="soft">
-        <template #title>
-          <h1>{{ props.error?.statusCode }}</h1>
-        </template>
-
-        <template #description>
-          {{ props.error?.message }}
-        </template>
-      </UAlert>
-    </UContainer>
-  </NuxtLayout>
+  <UError
+    :ui="{ statusCode: 'text-[180px] font-black text-secondary/75' }"
+    :error="{
+      statusCode: error?.statusCode,
+      message: error?.message,
+    }"
+    :clear="{
+      color: 'primary',
+      class: 'rounded-full px-8 py-4',
+      label: 'Перейти на главную',
+    }"
+  />
 </template>
 
 <script setup lang="ts">

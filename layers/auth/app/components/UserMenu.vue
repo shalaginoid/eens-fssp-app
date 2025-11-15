@@ -13,15 +13,15 @@
           label: collapsed ? undefined : user?.name,
           trailingIcon: collapsed ? undefined : 'i-lucide-chevrons-up-down',
         }"
-        class="data-[state=open]:bg-elevated"
-        color="neutral"
-        variant="ghost"
-        block
         :square="collapsed"
         :size="size"
         :ui="{
           trailingIcon: 'text-dimmed',
         }"
+        class="data-[state=open]:bg-elevated"
+        color="neutral"
+        variant="ghost"
+        block
       />
     </UDropdownMenu>
 
