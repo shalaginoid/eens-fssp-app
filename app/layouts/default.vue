@@ -2,7 +2,6 @@
   <UDashboardGroup unit="rem">
     <UDashboardSidebar
       id="default"
-      v-model:open="open"
       collapsible
       class="bg-elevated/25"
       :ui="{ footer: 'lg:border-t lg:border-default' }"
@@ -23,7 +22,7 @@
         </div>
 
         <div v-if="!collapsed" class="text-muted rounded px-3 py-1.5 text-sm">
-          Госпочта ФССП
+          {{ appName }}
         </div>
 
         <UNavigationMenu
@@ -56,7 +55,7 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui';
 
-const open = ref(false);
+const appName = useRuntimeConfig().public.appName;
 
 const links = [
   [
