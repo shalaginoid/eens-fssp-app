@@ -5,15 +5,29 @@
     </template>
 
     <template #body>
-      <div
-        class="mx-auto flex w-full flex-col gap-4 sm:gap-6 lg:max-w-3xl lg:gap-12"
-      >
-        <UPageCard>
-          <UTable :data="executors" :columns="columns" empty="Нет данных" />
+      <div class="mx-auto flex w-full flex-col lg:max-w-xl">
+        <UPageCard
+          variant="naked"
+          orientation="horizontal"
+          class="mb-4"
+          title="Исполнители"
+        >
+          <UButton
+            @click="openAddExecutorModal"
+            label="Добавить"
+            class="w-fit lg:ms-auto"
+          />
+        </UPageCard>
 
-          <div>
-            <UButton label="Добавить" @click="openAddExecutorModal" />
-          </div>
+        <UPageCard
+          variant="subtle"
+          :ui="{
+            container: 'p-0 sm:p-0 gap-y-0',
+            wrapper: 'items-stretch',
+            header: 'p-4 mb-0 border-b border-default',
+          }"
+        >
+          <UTable :data="executors" :columns="columns" empty="Нет данных" />
         </UPageCard>
       </div>
     </template>

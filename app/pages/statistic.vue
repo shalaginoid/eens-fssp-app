@@ -5,9 +5,7 @@
     </template>
 
     <template #body>
-      <div
-        class="mx-auto flex w-full flex-col gap-4 sm:gap-6 lg:max-w-3xl lg:gap-12"
-      >
+      <div class="mx-auto flex w-full flex-col lg:max-w-xl">
         <UPageCard>
           <p v-if="loading">Загрузка...</p>
 
