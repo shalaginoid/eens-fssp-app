@@ -33,7 +33,7 @@ async function useGetUsers(peers: any) {
           };
         }
       })
-      .filter((peer: any) => peer != null),
+      .filter((peer: any) => peer !== null && peer !== undefined),
   );
 
   return users;
