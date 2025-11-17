@@ -24,7 +24,7 @@ async function useGetUsers(peers: any) {
     peers.map(async (peer: any) => {
       const session = await getUserSession(peer);
 
-      if (session && session.id) {
+      if (session && session.user) {
         return {
           sessionId: session.id,
           peerId: peer.id,

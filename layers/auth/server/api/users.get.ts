@@ -41,10 +41,7 @@ export default defineEventHandler(async (event) => {
       return 0;
     });
   } catch (error: any) {
-    throw createError({
-      statusCode: 500,
-      message: error.message,
-    });
+    console.log(error.message);
   } finally {
     await client?.unbind();
   }
