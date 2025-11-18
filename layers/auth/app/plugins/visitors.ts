@@ -6,36 +6,27 @@ export default defineNuxtPlugin(() => {
 
   const visitors = useState<UserSession[]>('visitors', () => []);
 
-  const { open, close } = useWebSocket(`${app.baseURL}api/visitors`, {
+  const route = useRoute();
+
+  const { open } = useWebSocket(`${app.baseURL}api/visitors`, {
     immediate: false,
     async onMessage(ws, event) {
       visitors.value = JSON.parse(event.data);
     },
   });
 
-  const route = useRoute();
-  const { loggedIn } = useUserSession();
-
-  if (loggedIn && route.name !== 'login') {
-    open();
-  }
+  open();
 
   watch(
     () => route.name,
-    (newValue, oldValue) => {
-      if (oldValue === 'login') {
-        open();
-      }
-
-      if (newValue === 'login') {
-        close();
-      }
+    () => {
+      open();
     },
   );
 
   return {
     provide: {
-      visitors: visitors,
+      visitors,
     },
   };
 });

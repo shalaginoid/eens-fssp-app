@@ -1,8 +1,10 @@
+import type { Peer } from 'crossws';
+
 export default defineWebSocketHandler({
   async upgrade(request) {
     await requireUserSession(request);
   },
-  async open(peer) {
+  async open(peer: Peer) {
     const peers = peer.peers.values();
     const users = await useGetUsers(peers);
 
@@ -10,7 +12,7 @@ export default defineWebSocketHandler({
     peer.publish('visitors', JSON.stringify(users));
     peer.send(JSON.stringify(users));
   },
-  async close(peer) {
+  async close(peer: Peer) {
     const peers = peer.peers.values();
     const users = await useGetUsers(peers);
 
@@ -20,21 +22,21 @@ export default defineWebSocketHandler({
 });
 
 async function useGetUsers(peers: any) {
-  const users = await Promise.all(
-    peers
-      .map(async (peer: any) => {
-        const session = await getUserSession(peer);
+  const users: any = [];
 
-        if (session && session.user) {
-          return {
-            sessionId: session.id,
-            peerId: peer.id,
-            user: session.user,
-          };
-        }
-      })
-      .filter((peer: any) => peer !== null && peer !== undefined),
-  );
+  for (const peer of peers) {
+    try {
+      const session = await requireUserSession(peer);
+
+      if (session.user) {
+        users.push({
+          sessionId: session.id,
+          peerId: peer.id,
+          user: session.user,
+        });
+      }
+    } catch (error: any) {}
+  }
 
   return users;
 }
