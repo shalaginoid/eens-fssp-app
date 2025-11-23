@@ -206,7 +206,9 @@
               "
             />
 
-            <Excel v-if="messages" :data="messages" />
+            <ClientOnly>
+              <Excel v-if="messages" :data="messages" />
+            </ClientOnly>
           </div>
         </template>
       </UDashboardToolbar>
