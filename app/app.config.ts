@@ -1,17 +1,34 @@
 export default defineAppConfig({
   ui: {
-    card: {
+    // colors: {
+    //   neutral: 'zinc',
+    // },
+    tabs: {
       variants: {
         variant: {
-          soft: {
-            root: 'bg-white',
+          pill: {
+            list: 'bg-neutral-200/60',
           },
         },
       },
+    },
+    alert: {
       defaultVariants: {
-        variant: 'soft',
+        variant: 'subtle',
       },
     },
+    // card: {
+    //   variants: {
+    //     variant: {
+    //       soft: {
+    //         root: 'bg-white',
+    //       },
+    //     },
+    //   },
+    //   defaultVariants: {
+    //     variant: 'subtle',
+    //   },
+    // },
     fileUpload: {
       variants: {
         variant: {
@@ -28,6 +45,11 @@ export default defineAppConfig({
       },
     },
     select: {
+      defaultVariants: {
+        size: 'lg',
+      },
+    },
+    selectMenu: {
       defaultVariants: {
         size: 'lg',
       },

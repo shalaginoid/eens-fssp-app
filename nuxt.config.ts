@@ -23,7 +23,7 @@ export default defineNuxtConfig({
       ],
     },
   },
-  modules: ['@nuxt/ui', '@nuxt/hints'],
+  modules: ['@nuxt/ui'],
   ui: {
     fonts: false,
     colorMode: false,

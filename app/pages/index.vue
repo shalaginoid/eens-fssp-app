@@ -255,9 +255,7 @@ import type { TableColumn } from '@nuxt/ui';
 import SetStatusModal from '@/components/SetStatusModal.vue';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 
-useHead({
-  title: 'Уведомления',
-});
+useHead({ title: 'Уведомления' });
 
 const toast = useToast();
 const overlay = useOverlay();
