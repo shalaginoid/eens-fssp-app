@@ -2,11 +2,11 @@
 @import '@nuxt/ui';
 @source '../../../layers/**/*';
 
-@theme {
+:root {
+  --ui-container: 600px;
   --font-sans: 'Roboto', sans-serif;
   --ui-primary: #084b82;
   --ui-secondary: #f78e1e;
-  --ui-container: 900px;
   --ui-radius: 0.15rem;
 }
 
