@@ -3,7 +3,7 @@
     <template #header>
       <UDashboardNavbar>
         <template #title>
-          <span>Пользователи сервиса ({{ $users?.length }})</span>
+          <span>Пользователи сервиса ({{ users?.length }})</span>
         </template>
       </UDashboardNavbar>
     </template>
@@ -28,26 +28,32 @@
           />
         </UPageCard>
 
-        <UPageCard
-          variant="subtle"
-          :ui="{
-            container: 'p-0 sm:p-0 gap-y-0',
-            wrapper: 'items-stretch',
-            header: 'p-4 mb-0 border-b border-default',
-          }"
-        >
-          <UTable
-            :data="online"
-            :columns="columns"
-            :ui="{ thead: 'hidden', tr: 'data-[expanded=true]:bg-elevated' }"
-            empty="Нет данных"
+        <ClientOnly>
+          <UPageCard
+            variant="subtle"
+            :ui="{
+              container: 'p-0 sm:p-0 gap-y-0',
+              wrapper: 'items-stretch',
+              header: 'p-4 mb-0 border-b border-default',
+            }"
           >
-            <template #expanded="{ row }">
-              <div>{{ row.original.department }}</div>
-              <div>{{ row.original.jobTitle }}</div>
-            </template>
-          </UTable>
-        </UPageCard>
+            <UTable
+              :data="online"
+              :columns="columns"
+              :ui="{ thead: 'hidden', tr: 'data-[expanded=true]:bg-elevated' }"
+              empty="Нет данных"
+            >
+              <template #expanded="{ row }">
+                <div>{{ row.original.department }}</div>
+                <div>{{ row.original.jobTitle }}</div>
+              </template>
+            </UTable>
+          </UPageCard>
+
+          <template #fallback>
+            <UButton label="Загрузка" color="neutral" variant="link" loading />
+          </template>
+        </ClientOnly>
       </div>
     </template>
   </UDashboardPanel>
@@ -61,16 +67,18 @@ useHead({
   title: 'Пользователи сервиса',
 });
 
+const { data: users } = await useFetch('/api/users');
+
 const appName = useRuntimeConfig().public.appName;
 
 const UAvatar = resolveComponent('UAvatar');
 const UButton = resolveComponent('UButton');
 
-const { $visitors, $users } = useNuxtApp();
+const { $visitors } = useNuxtApp();
 
 const online = computed<any>(() => {
-  if ($users) {
-    const mergedArray = $users.map((item1) => {
+  if (users.value && $visitors) {
+    const mergedArray = users.value.map((item1) => {
       const matchingItem2 = toRaw($visitors.value).find(
         (item2) => item2.user?.mail === item1.mail,
       );

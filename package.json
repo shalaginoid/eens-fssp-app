@@ -17,7 +17,7 @@
     "json-as-xlsx": "^2.5.6",
     "ldapts": "^8.0.9",
     "moment": "^2.30.1",
-    "mssql": "^12.1.0",
+    "mssql": "^12.1.1",
     "nuxt": "^4.1.2",
     "nuxt-auth-utils": "^0.5.25",
     "vue": "^3.5.21",
@@ -25,10 +25,10 @@
     "vue-json-excel3": "^1.0.30",
     "vue-router": "^4.6.3",
     "xml2js": "^0.6.2",
-    "zod": "^4.1.12"
+    "zod": "^4.1.13"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.74",
+    "@iconify-json/lucide": "^1.2.75",
     "@types/mssql": "^9.1.8",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.7.1"

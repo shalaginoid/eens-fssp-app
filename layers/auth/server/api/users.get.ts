@@ -1,7 +1,7 @@
 import { Client } from 'ldapts';
 
 export default defineEventHandler(async (event) => {
-  // await requireUserSession(event);
+  await requireUserSession(event);
 
   let client;
 

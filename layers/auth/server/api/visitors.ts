@@ -6,7 +6,7 @@ export default defineWebSocketHandler({
   },
   async open(peer: Peer) {
     const peers = peer.peers.values();
-    const users = await useGetUsers(peers);
+    const users = await getVisitors(peers);
 
     peer.subscribe('visitors');
     peer.publish('visitors', JSON.stringify(users));
@@ -14,22 +14,22 @@ export default defineWebSocketHandler({
   },
   async close(peer: Peer) {
     const peers = peer.peers.values();
-    const users = await useGetUsers(peers);
+    const users = await getVisitors(peers);
 
     peer.unsubscribe('visitors');
     peer.publish('visitors', JSON.stringify(users));
   },
 });
 
-async function useGetUsers(peers: any) {
-  const users: any = [];
+async function getVisitors(peers: any) {
+  const visitors: Visitor[] = [];
 
   for (const peer of peers) {
     try {
       const session = await requireUserSession(peer);
 
       if (session.user) {
-        users.push({
+        visitors.push({
           sessionId: session.id,
           peerId: peer.id,
           user: session.user,
@@ -38,5 +38,5 @@ async function useGetUsers(peers: any) {
     } catch (error: any) {}
   }
 
-  return users;
+  return visitors;
 }

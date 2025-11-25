@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     },
     session: {
       name: pkg.name,
-      password: '456945b8c6c84388bqwe0876812317f6',
+      password: '456945b8c6c84388bqwe08768afe17f6',
       cookie: {
         sameSite: 'lax',
         secure: false,
