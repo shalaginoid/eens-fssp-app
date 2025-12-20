@@ -41,9 +41,4 @@ export default defineNuxtConfig({
       appName: pkg.description,
     },
   },
-  nitro: {
-    output: {
-      dir: pkg.name,
-    },
-  },
 });
