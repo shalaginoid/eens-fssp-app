@@ -1,8 +1,5 @@
 export default defineAppConfig({
   ui: {
-    // colors: {
-    //   neutral: 'zinc',
-    // },
     tabs: {
       variants: {
         variant: {
@@ -17,18 +14,6 @@ export default defineAppConfig({
         variant: 'subtle',
       },
     },
-    // card: {
-    //   variants: {
-    //     variant: {
-    //       soft: {
-    //         root: 'bg-white',
-    //       },
-    //     },
-    //   },
-    //   defaultVariants: {
-    //     variant: 'subtle',
-    //   },
-    // },
     fileUpload: {
       variants: {
         variant: {
@@ -37,31 +22,6 @@ export default defineAppConfig({
             base: 'p-4',
           },
         },
-      },
-    },
-    input: {
-      defaultVariants: {
-        size: 'lg',
-      },
-    },
-    select: {
-      defaultVariants: {
-        size: 'lg',
-      },
-    },
-    selectMenu: {
-      defaultVariants: {
-        size: 'lg',
-      },
-    },
-    checkbox: {
-      defaultVariants: {
-        size: 'lg',
-      },
-    },
-    button: {
-      defaultVariants: {
-        size: 'lg',
       },
     },
   },
