@@ -6,18 +6,64 @@
 
     <template #body>
       <div class="mx-auto flex w-full flex-col space-y-4 lg:max-w-xl">
-        <h2 class="font-bold">Стек технологий:</h2>
+        <UCard>
+          <h2 class="mb-4">Стек технологий</h2>
 
-        <ul class="mb-4 list-disc px-5">
-          <li>NodeJS</li>
-          <li>Nuxt</li>
-          <li>Typescript</li>
-          <li>Tailwind CSS</li>
-          <li>MSSQL</li>
-        </ul>
+          <ul class="mb-4 list-disc px-5">
+            <li>
+              <CustomLink to="https://nodejs.org/en" target="_blank">
+                NodeJS
+              </CustomLink>
+            </li>
+            <li>
+              <CustomLink to="https://nuxt.com" target="_blank">
+                Nuxt
+              </CustomLink>
+            </li>
+            <li>
+              <CustomLink to="https://www.typescriptlang.org" target="_blank">
+                Typescript
+              </CustomLink>
+            </li>
+            <li>
+              <CustomLink to="https://tailwindcss.com" target="_blank">
+                Tailwind CSS
+              </CustomLink>
+            </li>
+            <li>
+              <CustomLink
+                to="https://www.npmjs.com/package/mssql"
+                target="_blank"
+              >
+                MSSQL
+              </CustomLink>
+            </li>
+          </ul>
 
-        <h2 class="font-bold">Разработчик:</h2>
-        <p>Отдел сопровождения информационных систем (Шалагинов К. А.)</p>
+          <p>
+            Используется технология SSR (Server-Side Rendering), при которой
+            веб-страница генерируется на сервере и в браузер пользователя
+            отправляется уже готовый HTML-код. Это обеспечивает более быструю
+            начальную загрузку контента. В отличие от клиентского рендеринга,
+            где браузер сам собирает страницу с помощью JavaScript, при SSR
+            сервер выполняет всю работу по сборке и отправляет готовый
+            результат.
+          </p>
+        </UCard>
+
+        <UCard>
+          <h2 class="mb-4">Разработчик</h2>
+
+          <UUser
+            :avatar="{
+              src: 'http://portal.eksbyt.ru/docum/DocLib1/Шалагинов%20Константин%20Александрович.jpg',
+              icon: 'i-lucide-image',
+            }"
+            name="Шалагинов К. А."
+            description="Инженер"
+            to="mailto:shalaginovka@eens.ru"
+          />
+        </UCard>
       </div>
     </template>
   </UDashboardPanel>
