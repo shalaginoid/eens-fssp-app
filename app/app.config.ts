@@ -1,5 +1,17 @@
 export default defineAppConfig({
   ui: {
+    selectMenu: {
+      slots: {
+        content: 'min-w-fit',
+        item: ['cursor-pointer'],
+      },
+    },
+    select: {
+      slots: {
+        content: 'min-w-fit',
+        item: ['cursor-pointer'],
+      },
+    },
     tabs: {
       variants: {
         variant: {

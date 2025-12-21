@@ -6,7 +6,9 @@
       <UDashboardToolbar class="bg-elevated/50 py-3">
         <template #left>
           <div class="grid w-full grid-cols-6 gap-2">
-            <USelect v-model="date" :items="months" :loading="pending" />
+            <ClientOnly>
+              <USelect v-model="date" :items="months" :loading="pending" />
+            </ClientOnly>
 
             <!-- Тип должника -->
             <USelectMenu
