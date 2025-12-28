@@ -10,6 +10,8 @@
               <USelect v-model="date" :items="months" :loading="pending" />
             </ClientOnly>
 
+            <Excel v-if="messages" :data="messages" />
+
             <!-- Тип должника -->
             <USelectMenu
               :items="subjectTypesValues"
@@ -207,10 +209,6 @@
                 table?.tableApi?.getColumn('fssp:Spi')?.setFilterValue($event)
               "
             />
-
-            <ClientOnly>
-              <Excel v-if="messages" :data="messages" />
-            </ClientOnly>
           </div>
         </template>
       </UDashboardToolbar>
@@ -267,7 +265,7 @@ const date = ref(months[0]?.value);
 const messages = ref();
 const pagination = ref({
   pageIndex: 0,
-  pageSize: 25,
+  pageSize: 100,
 });
 
 const subjectTypesValues = ref(['ЮЛ', 'ФЛ', 'ИП']);
@@ -296,7 +294,7 @@ const columns: TableColumn<Message>[] = [
 
       return h(UTooltip, { text: status ?? 'Принято', delayDuration: 0 }, () =>
         h('div', {
-          class: `w-1.5 h-1.5 rounded-full m-auto ${color}`,
+          class: `w-2 h-2 rounded-full m-auto ${color}`,
         }),
       );
     },
