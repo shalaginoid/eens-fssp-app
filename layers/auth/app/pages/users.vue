@@ -12,13 +12,13 @@
       <div class="mx-auto flex w-full flex-col lg:max-w-xl">
         <UPageCard
           title="Пользователи"
-          :description="`Для предоставления доступа необходимо создать заявку в отдел сетевой инфраструктуры для включения в доменную группу «${appName}»`"
+          :description="`Для предоставления доступа необходимо подать заявку в отдел сетевой инфраструктуры для включения в доменную группу «${appName}»`"
           variant="naked"
           orientation="horizontal"
           class="mb-4"
         >
           <UButton
-            label="Создать заявку"
+            label="Подать заявку"
             to="http://portal.eksbyt.ru/openv/Lists/openview/NewLNA4.aspx?RootFolder="
             target="_blank"
             class="w-fit lg:ms-auto"
@@ -28,32 +28,81 @@
           />
         </UPageCard>
 
-        <ClientOnly>
-          <UPageCard
-            variant="subtle"
-            :ui="{
-              container: 'p-0 sm:p-0 gap-y-0',
-              wrapper: 'items-stretch',
-              header: 'p-4 mb-0 border-b border-default',
-            }"
-          >
+        <UPageCard
+          variant="subtle"
+          :ui="{
+            container: 'p-0 sm:p-0 gap-y-0 overflow-hidden',
+            wrapper: 'items-stretch',
+            header: 'p-4 mb-0 border-b border-default',
+          }"
+        >
+          <ClientOnly>
             <UTable
               :data="online"
               :columns="columns"
               :ui="{ thead: 'hidden', tr: 'data-[expanded=true]:bg-elevated' }"
               empty="Нет данных"
             >
+              <template #fullname-cell="{ row }">
+                <div class="flex items-center gap-3">
+                  <ULink :to="row.original.photo" target="_blank">
+                    <div class="group relative inline-block">
+                      <UAvatar
+                        :src="row.original.photo"
+                        :alt="row.original.fullname"
+                        :chip="
+                          row.original.status === 'В сети'
+                            ? {
+                                color: 'success',
+                              }
+                            : false
+                        "
+                        size="xl"
+                        class="transition-filter duration-300 group-hover:blur-xs"
+                      />
+
+                      <div
+                        class="absolute inset-0 flex items-center justify-center rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                      >
+                        <UIcon
+                          name="i-lucide-camera"
+                          class="h-6 w-6 text-white"
+                        />
+                      </div>
+                    </div>
+                  </ULink>
+
+                  <div>
+                    <p class="text-highlighted font-medium">
+                      {{ row.original.fullname }}
+                    </p>
+
+                    <p>
+                      <NuxtLink :to="`mailto:${row.original.mail}`">{{
+                        row.original.mail
+                      }}</NuxtLink>
+                    </p>
+                  </div>
+                </div>
+              </template>
+
               <template #expanded="{ row }">
                 <div>{{ row.original.department }}</div>
                 <div>{{ row.original.jobTitle }}</div>
               </template>
             </UTable>
-          </UPageCard>
 
-          <template #fallback>
-            <UButton label="Загрузка" color="neutral" variant="link" loading />
-          </template>
-        </ClientOnly>
+            <template #fallback>
+              <UButton
+                label="Загрузка"
+                color="neutral"
+                variant="link"
+                class="m-4"
+                loading
+              />
+            </template>
+          </ClientOnly>
+        </UPageCard>
       </div>
     </template>
   </UDashboardPanel>
@@ -63,21 +112,22 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { User } from '#auth-utils';
 
+const ULink = resolveComponent('ULink');
+const UAvatar = resolveComponent('UAvatar');
+const UButton = resolveComponent('UButton');
+
 useHead({
   title: 'Пользователи сервиса',
 });
 
-const { data: users } = await useFetch('/api/users');
-
 const appName = useRuntimeConfig().public.appName;
 
-const UAvatar = resolveComponent('UAvatar');
-const UButton = resolveComponent('UButton');
+const { data: users } = await useFetch('/api/users');
 
 const { $visitors } = useNuxtApp();
 
 const online = computed<any>(() => {
-  if (users.value && $visitors) {
+  if (process.browser && users.value && $visitors) {
     const mergedArray = users.value.map((item1) => {
       const matchingItem2 = toRaw($visitors.value).find(
         (item2) => item2.user?.mail === item1.mail,
@@ -94,36 +144,6 @@ const columns: TableColumn<User>[] = [
   {
     accessorKey: 'fullname',
     header: 'Пользователь',
-    cell: ({ row }) => {
-      return h('div', { class: 'flex items-center gap-3' }, [
-        h(UAvatar, {
-          src: `http://portal.eksbyt.ru/docum/DocLib1/${row.original.fullname}.jpg`,
-          alt: row.original.fullname,
-          size: 'lg',
-          chip:
-            row.original.status === 'В сети'
-              ? {
-                  color: 'success',
-                }
-              : false,
-        }),
-        h('div', undefined, [
-          h(
-            'p',
-            { class: 'font-medium text-highlighted' },
-            row.original.fullname,
-          ),
-          h('p', { class: '' }, row.original.mail),
-          // h(
-          //   'span',
-          //   {
-          //     class: `${colorMap[status as keyof typeof colorMap]}`,
-          //   },
-          //   status as string,
-          // ),
-        ]),
-      ]);
-    },
   },
   {
     accessorKey: 'status',
@@ -143,16 +163,6 @@ const columns: TableColumn<User>[] = [
       );
     },
   },
-  // {
-  //   accessorKey: 'department',
-  //   header: 'Отдел',
-  //   cell: ({ row }) => row.getValue('department'),
-  // },
-  // {
-  //   accessorKey: 'jobTitle',
-  //   header: 'Должность',
-  //   cell: ({ row }) => row.getValue('jobTitle'),
-  // },
   {
     id: 'expand',
     cell: ({ row }) =>

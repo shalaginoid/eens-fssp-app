@@ -1,5 +1,7 @@
 <template>
-  <div class="bg-elevated flex h-screen flex-col justify-between">
+  <div
+    class="bg-elevated flex h-screen flex-col justify-between overflow-hidden"
+  >
     <div class="flex flex-1 flex-col items-center px-6 py-12 lg:px-8">
       <div class="mb-8 pt-12">
         <img src="/images/eens.svg" width="50" height="50" />

@@ -22,10 +22,10 @@
 
     <UAlert
       v-if="errorMessage"
+      :description="errorMessage"
       class="mb-4"
       color="error"
       variant="soft"
-      :description="errorMessage"
     ></UAlert>
 
     <UFormField name="email">
@@ -71,9 +71,7 @@ import type { FormSubmitEvent } from '@nuxt/ui';
 
 definePageMeta({ layout: 'login' });
 
-useHead({
-  title: 'Авторизация',
-});
+useHead({ title: 'Авторизация' });
 
 const {
   public: { appName },
@@ -104,7 +102,6 @@ async function onSubmit(event: FormSubmitEvent<LoginSchema>) {
     await navigateTo('/');
   } catch (error: any) {
     errorMessage.value = translate(error.data.statusMessage);
-  } finally {
     loading.value = false;
   }
 }

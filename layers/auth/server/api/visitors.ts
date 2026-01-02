@@ -1,4 +1,4 @@
-import type { Peer } from 'crossws';
+import type { Peer, AdapterInternal } from 'crossws';
 
 export default defineWebSocketHandler({
   async upgrade(request) {
@@ -21,7 +21,7 @@ export default defineWebSocketHandler({
   },
 });
 
-async function getVisitors(peers: any) {
+async function getVisitors(peers: SetIterator<Peer<AdapterInternal>>) {
   const visitors: Visitor[] = [];
 
   for (const peer of peers) {

@@ -26,7 +26,10 @@
     </UDropdownMenu>
 
     <template #fallback>
-      <div v-if="!collapsed" class="flex w-full items-center gap-1.5 px-3 py-2">
+      <div
+        v-if="!collapsed"
+        class="flex w-full items-center gap-1.5 px-2.5 py-1.5"
+      >
         <div class="flex-none">
           <USkeleton class="h-5 w-5 rounded-full" />
         </div>

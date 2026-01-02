@@ -14,10 +14,10 @@ export default defineEventHandler(async (event) => {
 
     await client.bind(`eksbyt\\${ldap.username}`, ldap.password);
 
-    const query = `(&(objectCategory=user)(memberOf=cn=${ldap.group},ou=Пользователи ОАО ЕЭНС,dc=eksbyt,dc=ru))`;
+    const filter = `(&(objectCategory=person)(objectClass=user)(memberOf=cn=${ldap.group},ou=Пользователи ОАО ЕЭНС,dc=eksbyt,dc=ru)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))`;
 
     const { searchEntries } = await client.search('dc=eksbyt,dc=ru', {
-      filter: query,
+      filter,
     });
 
     const users = searchEntries.map((item) => {
@@ -28,6 +28,7 @@ export default defineEventHandler(async (event) => {
         mail: item.mail as string,
         department: item.department as string,
         jobTitle: item.title as string,
+        photo: `http://portal/docum/DocLib1/${item.cn}.jpg`,
       };
     });
 
@@ -53,8 +54,8 @@ function toShortName(fullName: any) {
   const words = name.split(/[. ]+/).filter((item: any) => item !== '');
 
   const surname = words[0];
-  const firstName = words[1].charAt(0) + '.';
-  const lastname = words[2].charAt(0) + '.';
+  const firstName = words[1]?.charAt(0) + '.';
+  const lastname = words[2]?.charAt(0) + '.';
 
   return surname + ' ' + firstName + ' ' + lastname;
 }

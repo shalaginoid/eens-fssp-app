@@ -40,11 +40,11 @@ export default defineEventHandler(async (event) => {
     }
 
     const user = {
-      fullname: searchEntries[0]?.cn,
+      fullname: searchEntries[0]?.cn as string,
       shortname: toShortName(searchEntries[0]?.cn as string),
-      login: searchEntries[0]?.sAMAccountName,
-      mail: searchEntries[0]?.mail,
-      department: searchEntries[0]?.department,
+      login: searchEntries[0]?.sAMAccountName as string,
+      mail: searchEntries[0]?.mail as string,
+      department: searchEntries[0]?.department as string,
     };
 
     await setUserSession(event, {
@@ -80,8 +80,8 @@ function toShortName(fullName: any) {
   const words = name.split(/[. ]+/).filter((item: any) => item !== '');
 
   const surname = words[0];
-  const firstName = words[1].charAt(0) + '.';
-  const lastname = words[2].charAt(0) + '.';
+  const firstName = words[1]?.charAt(0) + '.';
+  const lastname = words[2]?.charAt(0) + '.';
 
   return surname + ' ' + firstName + ' ' + lastname;
 }

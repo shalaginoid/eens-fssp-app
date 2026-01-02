@@ -10,7 +10,7 @@
           <UPageCard
             variant="subtle"
             :ui="{
-              container: 'p-0 sm:p-0 gap-y-0',
+              container: 'p-0 sm:p-0 gap-y-0 overflow-hidden',
               wrapper: 'items-stretch',
               header: 'p-4 mb-0 border-b border-default',
             }"
@@ -40,17 +40,17 @@ const { $visitors } = useNuxtApp();
 const columns: TableColumn<UserSession>[] = [
   {
     accessorKey: 'user',
-    header: 'E-mail',
-    cell: ({ row }) => row.getValue<User>('user')?.mail,
+    header: 'Логин',
+    cell: ({ row }) => row.getValue<User>('user')?.login,
   },
   {
     accessorKey: 'peerId',
-    header: 'Peer ID',
+    header: 'ID однорангового узла',
     cell: ({ row }) => row.getValue('peerId'),
   },
   {
     accessorKey: 'sessionId',
-    header: 'Session ID',
+    header: 'ID сессии',
     cell: ({ row }) => row.getValue('sessionId'),
   },
 ];
