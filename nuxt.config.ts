@@ -13,12 +13,8 @@ export default defineNuxtConfig({
       titleTemplate: `%s - ${pkg.description}`,
       link: [
         {
-          rel: 'preconnect',
-          href: 'https://fonts.googleapis.com',
-        },
-        {
           rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap',
+          href: `/${pkg.name}/fonts/font.css`,
         },
       ],
       script: [

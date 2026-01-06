@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build --preset=iis_node && robocopy .output \"\\\\s-eens-tfs1\\c$\\inetpub\\wwwroot\\eens-fssp\" /MIR /XD node_modules",
+    "build": "nuxt build --preset=iis_node && robocopy .output \"\\\\s-eens-tfs1\\c$\\inetpub\\wwwroot\\eens-fssp\" /MIR",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
@@ -24,7 +24,7 @@
     "vue-json-excel3": "^1.0.30",
     "vue-router": "^4.6.4",
     "xml2js": "^0.6.2",
-    "zod": "^4.3.4"
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.82",
