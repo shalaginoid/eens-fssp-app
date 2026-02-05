@@ -218,17 +218,17 @@
       <UTable
         :data="messages"
         :columns="columns"
-        :loading="pending"
         :ui="{
           th: 'text-xs py-1 px-1.5',
           td: 'whitespace-normal py-1 px-1.5 text-xs',
         }"
+        :loading="status === 'pending'"
+        loading-color="secondary"
         :pagination-options="{
           getPaginationRowModel: getPaginationRowModel(),
         }"
         v-model:pagination="pagination"
         ref="table"
-        loading-color="secondary"
         empty="Нет данных"
         sticky
       />
@@ -402,7 +402,11 @@ const columns: TableColumn<Message>[] = [
 
 const { data: statuses } = await useFetch<Status[]>('/api/statuses');
 const { data: executors } = await useFetch<Executor[]>('/api/executors');
-const { data: messData, pending } = await useFetch<Message[]>('/api/messages', {
+const {
+  data: messData,
+  pending,
+  status,
+} = await useFetch<Message[]>('/api/messages', {
   lazy: true,
   query: {
     date,
