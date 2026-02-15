@@ -28,7 +28,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.88",
+    "@iconify-json/lucide": "^1.2.90",
     "@types/mssql": "^9.1.9",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2"
