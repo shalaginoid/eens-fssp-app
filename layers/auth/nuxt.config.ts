@@ -21,5 +21,10 @@ export default defineNuxtConfig({
         secure: false,
       },
     },
+    ntlm: {
+      username: 'sharepoint',
+      password: '1q2w#E$R',
+      domain: 'eksbyt',
+    },
   },
 });

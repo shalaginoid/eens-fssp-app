@@ -102,6 +102,7 @@ async function onSubmit(event: FormSubmitEvent<LoginSchema>) {
     await navigateTo('/');
   } catch (error: any) {
     errorMessage.value = translate(error.data.statusMessage);
+  } finally {
     loading.value = false;
   }
 }

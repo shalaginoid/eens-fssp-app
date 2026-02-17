@@ -36,72 +36,76 @@
             header: 'p-4 mb-0 border-b border-default',
           }"
         >
-          <ClientOnly>
-            <UTable
-              :data="online"
-              :columns="columns"
-              :ui="{ thead: 'hidden', tr: 'data-[expanded=true]:bg-elevated' }"
-              empty="Нет данных"
-            >
-              <template #fullname-cell="{ row }">
-                <div class="flex items-center gap-3">
-                  <ULink :to="row.original.photo" target="_blank">
-                    <div class="group relative inline-block">
-                      <UAvatar
-                        :src="row.original.photo"
-                        :alt="row.original.fullname"
-                        :chip="
-                          row.original.status === 'В сети'
-                            ? {
-                                color: 'success',
-                              }
-                            : false
-                        "
-                        size="xl"
-                        class="transition-filter duration-300 group-hover:blur-xs"
+          <UTable
+            v-if="status === 'success'"
+            :data="usersWithStatuses"
+            :columns="columns"
+            :ui="{ thead: 'hidden', tr: 'data-[expanded=true]:bg-elevated' }"
+            empty="Нет данных"
+          >
+            <template #fullname-cell="{ row }">
+              <div class="flex items-center gap-3">
+                <ULink
+                  :to="row.original.photo + '?timestamp=' + timestamp"
+                  target="_blank"
+                >
+                  <div class="group relative inline-block">
+                    <UAvatar
+                      :src="`${baseUrl}api/photo/${row.original.fullname}`"
+                      :alt="row.original.fullname"
+                      :chip="
+                        row.original.status === 'В сети'
+                          ? {
+                              color: 'success',
+                            }
+                          : false
+                      "
+                      icon="i-lucide-image"
+                      class="transition-opacity duration-300 group-hover:opacity-0"
+                      size="xl"
+                      to="/"
+                    />
+
+                    <div
+                      class="bg-elevated absolute inset-0 flex items-center justify-center rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    >
+                      <UIcon
+                        name="i-mdi-open-in-new"
+                        class="text-muted size-5"
+                        title="Открыть фото"
                       />
-
-                      <div
-                        class="absolute inset-0 flex items-center justify-center rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                      >
-                        <UIcon
-                          name="i-lucide-camera"
-                          class="h-6 w-6 text-white"
-                        />
-                      </div>
                     </div>
-                  </ULink>
-
-                  <div>
-                    <p class="text-highlighted font-medium">
-                      {{ row.original.fullname }}
-                    </p>
-
-                    <p>
-                      <NuxtLink :to="`mailto:${row.original.mail}`">{{
-                        row.original.mail
-                      }}</NuxtLink>
-                    </p>
                   </div>
+                </ULink>
+
+                <div>
+                  <p class="text-highlighted font-medium">
+                    {{ row.original.fullname }}
+                  </p>
+
+                  <p>
+                    <NuxtLink :to="`mailto:${row.original.mail}`">{{
+                      row.original.mail
+                    }}</NuxtLink>
+                  </p>
                 </div>
-              </template>
-
-              <template #expanded="{ row }">
-                <div>{{ row.original.department }}</div>
-                <div>{{ row.original.jobTitle }}</div>
-              </template>
-            </UTable>
-
-            <template #fallback>
-              <UButton
-                label="Загрузка"
-                color="neutral"
-                variant="link"
-                class="m-4"
-                loading
-              />
+              </div>
             </template>
-          </ClientOnly>
+
+            <template #expanded="{ row }">
+              <div>{{ row.original.department }}</div>
+              <div>{{ row.original.jobTitle }}</div>
+            </template>
+          </UTable>
+
+          <UButton
+            v-else
+            label="Загрузка"
+            color="neutral"
+            variant="link"
+            class="m-4"
+            loading
+          />
         </UPageCard>
       </div>
     </template>
@@ -111,6 +115,7 @@
 <script lang="ts" setup>
 import type { TableColumn } from '@nuxt/ui';
 import type { User } from '#auth-utils';
+import moment from 'moment';
 
 const ULink = resolveComponent('ULink');
 const UAvatar = resolveComponent('UAvatar');
@@ -120,23 +125,31 @@ useHead({
   title: 'Пользователи сервиса',
 });
 
+const baseUrl = useRuntimeConfig().app.baseURL;
 const appName = useRuntimeConfig().public.appName;
 
-const { data: users } = await useFetch('/api/users');
+const timestamp = ref();
+
+onMounted(() => {
+  timestamp.value = moment().unix();
+});
 
 const { $visitors } = useNuxtApp();
 
-const online = computed<any>(() => {
-  if (process.browser && users.value && $visitors) {
-    const mergedArray = users.value.map((item1) => {
-      const matchingItem2 = toRaw($visitors.value).find(
+const { data: users, status } = await useFetch('/api/users', {
+  server: false,
+  lazy: true,
+});
+
+const usersWithStatuses = computed<any>(() => {
+  if (users.value && $visitors) {
+    return users.value.map((item1) => {
+      const matchingItem2 = $visitors.value.find(
         (item2) => item2.user?.mail === item1.mail,
       );
 
       return { ...item1, status: matchingItem2 ? 'В сети' : 'Не в сети' };
     });
-
-    return mergedArray;
   }
 });
 
