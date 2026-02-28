@@ -11,12 +11,6 @@ export default defineNuxtConfig({
         lang: 'ru',
       },
       titleTemplate: `%s - ${pkg.description}`,
-      link: [
-        {
-          rel: 'stylesheet',
-          href: `/${pkg.name}/fonts/font.css`,
-        },
-      ],
       script: [
         {
           nomodule: true,
@@ -27,8 +21,12 @@ export default defineNuxtConfig({
   },
   modules: ['@nuxt/ui'],
   ui: {
-    fonts: false,
+    fonts: true,
     colorMode: false,
+  },
+  fonts: {
+    devtools: false,
+    families: [{ name: 'Roboto', provider: 'bunny', weights: ['100 900'] }],
   },
   css: ['~/assets/css/main.css'],
   runtimeConfig: {

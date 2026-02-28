@@ -2,9 +2,12 @@
 @import '@nuxt/ui';
 @source '../../../layers/**/*';
 
+@theme {
+  --font-sans: 'Roboto';
+}
+
 :root {
   --ui-container: 600px;
-  --font-sans: 'Roboto', sans-serif;
   --ui-primary: #084b82;
   --ui-secondary: #f78e1e;
   --ui-radius: 0.15rem;
