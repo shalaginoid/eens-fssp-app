@@ -29,6 +29,9 @@ export default defineNuxtConfig({
     devtools: false,
     families: [{ name: 'Roboto', provider: 'bunny', weights: ['100 900'] }],
   },
+  icon: {
+    provider: 'server',
+  },
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
     mssql: config.mssql,
