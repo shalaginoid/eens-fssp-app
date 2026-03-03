@@ -2,8 +2,9 @@ import config from './config';
 import pkg from './package.json';
 
 export default defineNuxtConfig({
-  compatibilityDate: '2025-10-02',
+  compatibilityDate: '2026-02-20',
   devtools: { enabled: false },
+  ssr: false,
   app: {
     baseURL: `/${pkg.name}/`,
     head: {

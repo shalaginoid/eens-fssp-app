@@ -5,14 +5,14 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build --preset=iis_node",
-    "deploy": "robocopy .output \"\\\\s-eens-tfs1\\c$\\inetpub\\wwwroot\\eens-fssp\" /MIR",
+    "deploy": "nuxt build --preset=iis_node && robocopy .output \"\\\\s-eens-tfs1\\c$\\inetpub\\wwwroot\\eens-fssp\" /MIR",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/ui": "^4.5.0",
+    "@nuxt/ui": "^4.5.1",
     "axios-ntlm": "^1.4.6",
     "chart.js": "^4.5.1",
     "json-as-xlsx": "^2.5.6",
@@ -30,7 +30,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.94",
+    "@iconify-json/lucide": "^1.2.95",
     "@iconify-json/mdi": "^1.2.3",
     "@types/mssql": "^9.1.9",
     "prettier": "^3.8.1",
