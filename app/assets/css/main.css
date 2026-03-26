@@ -13,6 +13,10 @@
   --ui-radius: 0.15rem;
 }
 
+.dark {
+  --ui-primary: var(--ui-color-neutral-50);
+}
+
 .link {
   @apply text-secondary border-secondary/30 hover:text-secondary/70 hover:border-secondary/15 border-b transition-colors;
 }

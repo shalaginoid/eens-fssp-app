@@ -2,7 +2,7 @@ import config from './config';
 import pkg from './package.json';
 
 export default defineNuxtConfig({
-  compatibilityDate: '2026-02-20',
+  compatibilityDate: '2026-03-25',
   devtools: { enabled: false },
   ssr: false,
   app: {
@@ -11,7 +11,16 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'ru',
       },
-      titleTemplate: `%s - ${pkg.description}`,
+      link: [
+        {
+          rel: 'icon',
+          href: `/${pkg.name}/favicon.ico`,
+        },
+        {
+          rel: 'stylesheet',
+          href: `/${pkg.name}/fonts/style.css`,
+        },
+      ],
       script: [
         {
           nomodule: true,
@@ -22,12 +31,8 @@ export default defineNuxtConfig({
   },
   modules: ['@nuxt/ui'],
   ui: {
-    fonts: true,
-    colorMode: false,
-  },
-  fonts: {
-    devtools: false,
-    families: [{ name: 'Roboto', provider: 'bunny', weights: ['100 900'] }],
+    fonts: false,
+    colorMode: true,
   },
   icon: {
     provider: 'server',
@@ -37,6 +42,21 @@ export default defineNuxtConfig({
     mssql: config.mssql,
     public: {
       appName: pkg.description,
+    },
+  },
+  vite: {
+    optimizeDeps: {
+      include: [
+        '@vueuse/core',
+        'moment',
+        'moment/dist/locale/ru',
+        'vue-chartjs',
+        'chart.js',
+        'zod',
+        'zod/locales',
+        '@tanstack/vue-table',
+        'vue-json-excel3',
+      ],
     },
   },
 });

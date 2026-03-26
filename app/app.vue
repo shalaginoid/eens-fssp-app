@@ -9,12 +9,6 @@
 </template>
 
 <script setup lang="ts">
-const { app } = useRuntimeConfig();
-
-useHead({
-  link: [{ rel: 'icon', href: `${app.baseURL}favicon.ico` }],
-});
-
 onMounted(() => {
   document.fonts.ready.then(() => {
     document.documentElement.classList.add('fonts-loaded');
