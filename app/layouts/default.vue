@@ -12,15 +12,15 @@
         </NuxtLink>
 
         <div v-if="!collapsed" class="ms-auto flex items-center gap-1.5">
-          <ColorModeButton />
-          <UDashboardSidebarCollapse size="md" class="text-neutral-300" />
+          <ColorModeButton class="text-neutral-400" />
+          <UDashboardSidebarCollapse size="md" class="text-neutral-400" />
         </div>
       </template>
 
       <template #default="{ collapsed }">
         <div v-if="collapsed">
-          <ColorModeButton />
-          <UDashboardSidebarCollapse size="md" class="text-neutral-300" />
+          <ColorModeButton class="text-neutral-400" />
+          <UDashboardSidebarCollapse size="md" class="text-neutral-400" />
         </div>
 
         <div

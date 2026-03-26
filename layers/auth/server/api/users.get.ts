@@ -30,7 +30,6 @@ export default defineEventHandler(async (event) => {
           'physicalDeliveryOfficeName',
           'department',
           'telephoneNumber',
-          'telephoneNumber',
           'ipPhone',
           'title',
         ],

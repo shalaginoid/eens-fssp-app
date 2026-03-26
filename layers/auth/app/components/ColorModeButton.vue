@@ -4,7 +4,6 @@
       @click="startViewTransition"
       :aria-label="`Switch to ${nextTheme} mode`"
       :icon="`i-lucide-${nextTheme === 'dark' ? 'sun' : 'moon'}`"
-      class="text-neutral-400"
       color="neutral"
       variant="ghost"
       size="md"
@@ -18,7 +17,9 @@
 <script setup lang="ts">
 const colorMode = useColorMode();
 
-const nextTheme = computed(() => (colorMode.value === 'dark' ? 'light' : 'dark'));
+const nextTheme = computed(() =>
+  colorMode.value === 'dark' ? 'light' : 'dark',
+);
 
 const switchTheme = () => {
   colorMode.preference = nextTheme.value;
@@ -32,7 +33,10 @@ const startViewTransition = (event: MouseEvent) => {
 
   const x = event.clientX;
   const y = event.clientY;
-  const endRadius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+  const endRadius = Math.hypot(
+    Math.max(x, window.innerWidth - x),
+    Math.max(y, window.innerHeight - y),
+  );
 
   const transition = document.startViewTransition(() => {
     switchTheme();
@@ -42,7 +46,10 @@ const startViewTransition = (event: MouseEvent) => {
     const duration = 600;
     document.documentElement.animate(
       {
-        clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`],
+        clipPath: [
+          `circle(0px at ${x}px ${y}px)`,
+          `circle(${endRadius}px at ${x}px ${y}px)`,
+        ],
       },
       {
         duration: duration,
