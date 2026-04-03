@@ -9,6 +9,7 @@ declare module '#auth-utils' {
     jobTitle?: string;
     status?: string;
     photo?: string;
+    memberOf?: Array<string>;
   }
 }
 

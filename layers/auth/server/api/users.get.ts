@@ -3,6 +3,8 @@ import { Client } from 'ldapts';
 export default defineEventHandler(async (event) => {
   await requireUserSession(event);
 
+  const { access } = useRuntimeConfig();
+
   let client;
 
   try {
@@ -14,10 +16,10 @@ export default defineEventHandler(async (event) => {
 
     await client.bind(`eksbyt\\${ldap.username}`, ldap.password);
 
-    const filter = `(&(objectCategory=person)(objectClass=user)(memberOf=cn=${ldap.group},ou=Пользователи ОАО ЕЭНС,dc=eksbyt,dc=ru)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))`;
+    // const filter = `(&(objectCategory=person)(objectClass=user)(memberOf=cn=${ldap.group},ou=Пользователи ОАО ЕЭНС,dc=eksbyt,dc=ru)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))`;
 
     // Все сотрудники
-    // const filter = `(&(mail=*@eens.ru)(department=*)(objectCategory=person)(objectClass=user)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))`;
+    const filter = `(&(mail=*@eens.ru)(department=*)(objectCategory=person)(objectClass=user)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))`;
 
     const { searchEntries } = await client.search(
       'ou=Пользователи ОАО ЕЭНС,dc=eksbyt,dc=ru',
@@ -32,6 +34,7 @@ export default defineEventHandler(async (event) => {
           'telephoneNumber',
           'ipPhone',
           'title',
+          'memberOf',
         ],
       },
     );
@@ -48,10 +51,23 @@ export default defineEventHandler(async (event) => {
         ipPhone: item.ipPhone as string,
         jobTitle: item.title as string,
         photo: `http://portal/docum/DocLib1/${item.displayName}.jpg`,
+        groups: item.memberOf as Array<string>,
       };
     });
 
-    const sortedUsers = users.sort((a, b) =>
+    const filterdUsers = users.filter((item) => {
+      return (
+        access.departments.includes(item.department) ||
+        access.accounts.includes(item.login) ||
+        item.groups.some(
+          (el) =>
+            el ===
+            `CN=${access.group},OU=Пользователи ОАО ЕЭНС,DC=eksbyt,DC=ru`,
+        )
+      );
+    });
+
+    const sortedUsers = filterdUsers.sort((a, b) =>
       a.fullname.localeCompare(b.fullname),
     );
 

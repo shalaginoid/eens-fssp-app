@@ -35,9 +35,62 @@
             wrapper: 'items-stretch',
             header: 'p-4 mb-0 border-b border-default',
           }"
+          class="mb-4 p-4"
+        >
+          <div>
+            <UFormField name="department">
+              <USelectMenu
+                :items="departments"
+                :searchInput="{ placeholder: 'Поиск...', variant: 'none' }"
+                :model-value="
+                  table?.tableApi
+                    ?.getColumn('department')
+                    ?.getFilterValue() as string
+                "
+                :ui="{
+                  trailingIcon:
+                    'group-data-[state=open]:rotate-180 transition-transform duration-200',
+                  content: 'max-h-120',
+                }"
+                @update:model-value="
+                  table?.tableApi
+                    ?.getColumn('department')
+                    ?.setFilterValue($event)
+                "
+                placeholder="Отдел"
+                class="w-full"
+              >
+                <template #empty>Нет данных</template>
+                <template #trailing>
+                  <UIcon
+                    v-if="
+                      table?.tableApi?.getColumn('department')?.getFilterValue()
+                    "
+                    name="i-lucide-x"
+                    class="text-muted size-4 cursor-pointer"
+                    @click.stop="
+                      table?.tableApi
+                        ?.getColumn('department')
+                        ?.setFilterValue(undefined)
+                    "
+                  />
+                </template>
+              </USelectMenu>
+            </UFormField>
+          </div>
+        </UPageCard>
+
+        <UPageCard
+          variant="subtle"
+          :ui="{
+            container: 'p-0 sm:p-0 gap-y-0 overflow-hidden',
+            wrapper: 'items-stretch',
+            header: 'p-4 mb-0 border-b border-default',
+          }"
         >
           <UTable
             v-if="status === 'success'"
+            ref="table"
             :data="usersWithStatuses"
             :columns="columns"
             :ui="{ thead: 'hidden', tr: 'data-[expanded=true]:bg-elevated' }"
@@ -92,6 +145,10 @@
               </div>
             </template>
 
+            <template #department-cell>
+              <div></div>
+            </template>
+
             <template #expanded="{ row }">
               <div>{{ row.original.department }}</div>
               <div>{{ row.original.jobTitle }}</div>
@@ -125,6 +182,8 @@ useHead({
   title: 'Пользователи сервиса',
 });
 
+const table = useTemplateRef('table');
+
 const baseUrl = useRuntimeConfig().app.baseURL;
 const appName = useRuntimeConfig().public.appName;
 
@@ -140,6 +199,10 @@ const { data: users, status } = await useFetch('/api/users', {
   server: false,
   lazy: true,
 });
+
+const departments: any = computed(() => [
+  ...new Set(users.value?.map((item: any) => item.department).sort()),
+]);
 
 const usersWithStatuses = computed<any>(() => {
   if (users.value && $visitors) {
@@ -157,6 +220,24 @@ const columns: TableColumn<User>[] = [
   {
     accessorKey: 'fullname',
     header: 'Пользователь',
+  },
+  {
+    accessorKey: 'department',
+    header: 'Отдел',
+    meta: {
+      class: {
+        td: 'whitespace-normal',
+      },
+    },
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue) {
+        return true;
+      }
+
+      const value = row.getValue(columnId);
+
+      return value === filterValue;
+    },
   },
   {
     accessorKey: 'status',

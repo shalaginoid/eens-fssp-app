@@ -8,10 +8,12 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
+    access: {
+      group: pkg.description,
+    },
     ldap: {
       username: 'tfsiis',
       password: 'Dem@Gandu42!HH7',
-      group: pkg.description,
     },
     session: {
       name: pkg.name,

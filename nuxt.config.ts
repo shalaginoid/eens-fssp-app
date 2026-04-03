@@ -39,6 +39,10 @@ export default defineNuxtConfig({
   },
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
+    access: {
+      accounts: [],
+      departments: [],
+    },
     mssql: config.mssql,
     public: {
       appName: pkg.description,

@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   let client;
 
   try {
-    const { ldap } = useRuntimeConfig();
+    const { access } = useRuntimeConfig();
 
     const payload = await readValidatedBody(event, (body) =>
       loginSchema.safeParse(body),
@@ -19,21 +19,33 @@ export default defineEventHandler(async (event) => {
 
     const { email, password } = payload.data;
 
+    const login = email.split('@')[0];
+
     client = new Client({
       url: 'ldap://eksbyt.ru',
     });
 
-    await client.bind(`eksbyt\\${email.split('@')[0]}`, password);
+    await client.bind(`eksbyt\\${login}`, password);
 
     const { searchEntries } = await client.search('dc=eksbyt,dc=ru', {
       filter: `(mail=${email})`,
     });
 
     const memberOf = searchEntries[0]?.memberOf as Array<string>;
-    const mailGroupString = `CN=${ldap.group},OU=Пользователи ОАО ЕЭНС,DC=eksbyt,DC=ru`;
-    const isMailGroupMember = memberOf.includes(mailGroupString);
 
-    if (!isMailGroupMember) {
+    const isMemberOfGroup = memberOf.includes(
+      `CN=${access.group},OU=Пользователи ОАО ЕЭНС,DC=eksbyt,DC=ru`,
+    );
+
+    const memberOfAccounts = access.accounts.includes(
+      searchEntries[0]?.sAMAccountName as string,
+    );
+
+    const memberOfDepartment = access.departments.includes(
+      searchEntries[0]?.department as string,
+    );
+
+    if (!memberOfAccounts && !memberOfDepartment && !isMemberOfGroup) {
       throw createError({
         statusCode: 403,
       });
@@ -66,7 +78,7 @@ export default defineEventHandler(async (event) => {
     } else {
       throw createError({
         statusCode: 500,
-        statusMessage: 'ECONNREFUSED',
+        statusMessage: error.message,
       });
     }
   } finally {
