@@ -59,11 +59,7 @@ export default defineEventHandler(async (event) => {
       return (
         access.departments.includes(item.department) ||
         access.accounts.includes(item.login) ||
-        item.groups.some(
-          (el) =>
-            el ===
-            `CN=${access.group},OU=Пользователи ОАО ЕЭНС,DC=eksbyt,DC=ru`,
-        )
+        item.groups.some((el) => el.includes(access.group))
       );
     });
 

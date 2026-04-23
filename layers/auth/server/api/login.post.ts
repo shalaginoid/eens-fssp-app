@@ -33,10 +33,6 @@ export default defineEventHandler(async (event) => {
 
     const memberOf = searchEntries[0]?.memberOf as Array<string>;
 
-    const isMemberOfGroup = memberOf.includes(
-      `CN=${access.group},OU=Пользователи ОАО ЕЭНС,DC=eksbyt,DC=ru`,
-    );
-
     const memberOfAccounts = access.accounts.includes(
       searchEntries[0]?.sAMAccountName as string,
     );
@@ -44,6 +40,8 @@ export default defineEventHandler(async (event) => {
     const memberOfDepartment = access.departments.includes(
       searchEntries[0]?.department as string,
     );
+
+    const isMemberOfGroup = memberOf.some((el) => el.includes(access.group));
 
     if (!memberOfAccounts && !memberOfDepartment && !isMemberOfGroup) {
       throw createError({
