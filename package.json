@@ -6,7 +6,7 @@
   "author": "ShalaginovKA",
   "scripts": {
     "build": "nuxt build --preset=iis_node",
-    "deploy": "nuxt build --preset=iis_node && robocopy .output \"\\\\s-eens-tfs1\\c$\\inetpub\\wwwroot\\eens-fssp\" /MIR",
+    "deploy": "robocopy .output \"\\\\s-eens-tfs1\\c$\\inetpub\\wwwroot\\eens-fssp\" /MIR",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
