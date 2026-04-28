@@ -11,32 +11,19 @@
 
           <ul class="list-disc px-5">
             <li>
-              <CustomLink to="https://nodejs.org/en" target="_blank">
-                NodeJS
-              </CustomLink>
+              <AppLink to="https://nodejs.org/en">NodeJS</AppLink>
             </li>
             <li>
-              <CustomLink to="https://nuxt.com" target="_blank">
-                Nuxt
-              </CustomLink>
+              <AppLink to="https://nuxt.com">Nuxt</AppLink>
             </li>
             <li>
-              <CustomLink to="https://www.typescriptlang.org" target="_blank">
-                Typescript
-              </CustomLink>
+              <AppLink to="https://www.typescriptlang.org">Typescript</AppLink>
             </li>
             <li>
-              <CustomLink to="https://tailwindcss.com" target="_blank">
-                Tailwind CSS
-              </CustomLink>
+              <AppLink to="https://tailwindcss.com">Tailwind CSS</AppLink>
             </li>
             <li>
-              <CustomLink
-                to="https://www.npmjs.com/package/mssql"
-                target="_blank"
-              >
-                MSSQL
-              </CustomLink>
+              <AppLink to="https://www.npmjs.com/package/mssql">MSSQL</AppLink>
             </li>
           </ul>
         </UCard>
