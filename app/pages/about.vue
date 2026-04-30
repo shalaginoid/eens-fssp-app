@@ -38,7 +38,7 @@
             }"
             to="mailto:shalaginovka@eens.ru"
             name="Шалагинов К. А."
-            description="Инженер"
+            description="Отдел сопровождения информационных систем"
           />
         </UCard>
       </div>
