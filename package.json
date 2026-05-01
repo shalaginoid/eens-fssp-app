@@ -6,7 +6,7 @@
   "author": "ShalaginovKA",
   "scripts": {
     "build": "nuxt build --preset=iis_node",
-    "deploy": "robocopy .output \"\\\\s-eens-tfs1\\c$\\inetpub\\wwwroot\\eens-fssp\" /MIR",
+    "deploy": "nuxt build --preset=iis_node && robocopy .output \"\\\\s-eens-tfs1\\c$\\inetpub\\wwwroot\\eens-fssp\" /MIR",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
@@ -24,10 +24,10 @@
     "vue-json-excel3": "^1.0.30",
     "vue-router": "^5.0.6",
     "xml2js": "^0.6.2",
-    "zod": "^4.3.6"
+    "zod": "^4.4.1"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.104",
+    "@iconify-json/lucide": "^1.2.105",
     "@iconify-json/mdi": "^1.2.3",
     "@types/mssql": "^12.3.0",
     "prettier": "^3.8.3",
