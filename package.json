@@ -24,7 +24,7 @@
     "vue-json-excel3": "^1.0.30",
     "vue-router": "^5.0.6",
     "xml2js": "^0.6.2",
-    "zod": "^4.4.1"
+    "zod": "^4.4.2"
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.105",
